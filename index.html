@@ -1,2022 +1,670 @@
 <!DOCTYPE html>
-<html lang="es" class="dark">
+<html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Halloween QR">
-    <meta name="theme-color" content="#172b4d">
-    <title>Argon QR Scanner | iOS Halloween Edition</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Verificador QR Halloween Party 5.0</title>
+  
+  <!-- Estilos Argon / Bootstrap / Iconos -->
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://unpkg.com/html5-qrcode"></script>
 
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts: Plus Jakarta Sans (Argon System Typography) -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <!-- Font Awesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <!-- HTML5-QRCode Library for iOS Safari Live Camera & Instant Photo Decoding -->
-    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+  <style>
+    :root {
+      --primary: #5e72e4;
+      --success: #2dce89;
+      --warning: #fb6340;
+      --danger: #f5365c;
+      --dark: #172b4d;
+      --bg: #111322;
+      --card-bg: #1e2238;
+      --card-border: #2c3258;
+      --text: #e9ecef;
+    }
 
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['"Plus Jakarta Sans"', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
-                    },
-                    colors: {
-                        argon: {
-                            dark: '#172b4d',
-                            darker: '#0b1324',
-                            primary: '#5e72e4',
-                            primaryHover: '#485fe0',
-                            orange: '#fb6340',
-                            success: '#2dce89',
-                            danger: '#f5365c',
-                            warning: '#ffd600',
-                            info: '#11cdef',
-                        }
-                    },
-                    boxShadow: {
-                        'argon': '0 10px 30px -5px rgba(0, 0, 0, 0.5)',
-                        'glow-green': '0 0 28px rgba(45, 206, 137, 0.55)',
-                        'glow-orange': '0 0 28px rgba(251, 99, 64, 0.55)',
-                        'glow-red': '0 0 28px rgba(245, 54, 92, 0.55)',
-                        'glow-indigo': '0 0 24px rgba(94, 114, 228, 0.45)',
-                    }
-                }
-            }
-        }
-    </script>
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    body {
+      margin: 0;
+      padding: 0 0 85px 0;
+      font-family: 'Open Sans', sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
 
-    <style>
-        :root {
-            --safe-top: env(safe-area-inset-top, 0px);
-            --safe-bottom: env(safe-area-inset-bottom, 0px);
-        }
+    /* Header */
+    .header {
+      padding: 16px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: linear-gradient(135deg, #1f1a3a 0%, #0d0e1a 100%);
+      border-bottom: 1px solid var(--card-border);
+    }
+    .header-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .badge-event {
+      background: rgba(251, 99, 64, 0.2);
+      color: var(--warning);
+      padding: 3px 8px;
+      border-radius: 12px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
 
-        * {
-            -webkit-tap-highlight-color: transparent;
-        }
+    /* Contadores */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      padding: 12px 16px;
+    }
+    .stat-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 10px 4px;
+      text-align: center;
+    }
+    .stat-label {
+      font-size: 0.65rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: #8898aa;
+    }
+    .stat-val {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-top: 2px;
+    }
 
-        body {
-            background-color: #0b1324;
-            color: #f8fafc;
-            overflow-x: hidden;
-            padding-top: var(--safe-top);
-            padding-bottom: calc(5.5rem + var(--safe-bottom));
-            user-select: none;
-            -webkit-user-select: none;
-        }
+    /* Secciones */
+    .view-section { display: none; padding: 12px 16px; }
+    .view-section.active { display: block; }
 
-        input, textarea, select {
-            user-select: text;
-            -webkit-user-select: text;
-            font-size: 16px !important; /* Prevents iOS Safari auto-zoom on input focus */
-        }
+    /* Lector QR */
+    #reader-container {
+      position: relative;
+      background: #000;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 2px solid var(--card-border);
+      margin-bottom: 16px;
+      min-height: 260px;
+    }
+    #reader { width: 100%; }
 
-        /* Argon Header Gradient (Halloween Indigo + Deep Purple + Pumpkin Glow) */
-        .argon-ios-header {
-            background: linear-gradient(135deg, #172b4d 0%, #312e81 52%, #7c2d12 100%);
-            position: relative;
-        }
+    /* Estado de Validación */
+    .result-box {
+      border-radius: 16px;
+      padding: 18px;
+      text-align: center;
+      background: var(--card-bg);
+      border: 2px solid var(--card-border);
+      transition: all 0.25s ease;
+    }
+    .result-box.valid {
+      border-color: var(--success);
+      background: rgba(45, 206, 137, 0.12);
+    }
+    .result-box.duplicate {
+      border-color: var(--warning);
+      background: rgba(251, 99, 64, 0.12);
+    }
+    .result-box.invalid {
+      border-color: var(--danger);
+      background: rgba(245, 54, 92, 0.12);
+    }
+    .result-box.loading {
+      border-color: var(--primary);
+      background: rgba(94, 114, 228, 0.12);
+    }
 
-        /* Argon Glass Card */
-        .argon-card {
-            background: rgba(23, 43, 77, 0.82);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.45);
-        }
+    .result-icon {
+      font-size: 2.8rem;
+      margin-bottom: 8px;
+    }
+    .result-status {
+      font-size: 0.95rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 6px;
+    }
+    .result-name {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #fff;
+      word-break: break-word;
+    }
+    .result-detail {
+      font-size: 0.82rem;
+      color: #adb5bd;
+      margin-top: 6px;
+    }
 
-        /* iOS Bottom Tab Bar */
-        .ios-tab-bar {
-            background: rgba(15, 23, 42, 0.92);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-top: 1px solid rgba(255, 255, 255, 0.12);
-            padding-bottom: max(0.5rem, var(--safe-bottom));
-        }
+    /* Formularios y Botones */
+    .btn {
+      width: 100%;
+      padding: 12px 16px;
+      border-radius: 10px;
+      border: none;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .btn-primary { background: var(--primary); color: #fff; }
+    .btn-success { background: var(--success); color: #fff; }
+    .btn-warning { background: var(--warning); color: #fff; }
 
-        /* Active Touch Feedback for iOS Buttons */
-        .btn-ios {
-            transition: transform 0.12s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.12s ease;
-        }
-        .btn-ios:active:not(:disabled) {
-            transform: scale(0.96);
-            opacity: 0.9;
-        }
+    textarea {
+      width: 100%;
+      height: 140px;
+      background: #151829;
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      color: #fff;
+      padding: 10px;
+      font-family: inherit;
+      font-size: 0.85rem;
+      margin-top: 8px;
+    }
 
-        /* Laser Scan Animation */
-        @keyframes laserSweep {
-            0% { top: 10%; opacity: 0.85; }
-            50% { top: 86%; opacity: 1; }
-            100% { top: 10%; opacity: 0.85; }
-        }
-        .scanner-laser {
-            position: absolute;
-            left: 8%;
-            right: 8%;
-            height: 3px;
-            background: linear-gradient(90deg, transparent, #fb6340, #2dce89, #fb6340, transparent);
-            box-shadow: 0 0 14px #fb6340;
-            animation: laserSweep 2.2s infinite ease-in-out;
-            pointer-events: none;
-            z-index: 25;
-        }
+    /* Tabla / Lista */
+    .guest-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 10px;
+      max-height: 55vh;
+      overflow-y: auto;
+    }
+    .guest-item {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      padding: 10px 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .guest-item.in {
+      border-left: 4px solid var(--success);
+    }
+    .guest-name { font-weight: 600; font-size: 0.9rem; }
+    .guest-sub { font-size: 0.72rem; color: #8898aa; }
 
-        /* Status Card Pop Animation */
-        @keyframes statusPop {
-            0% { transform: scale(0.94); opacity: 0.6; }
-            60% { transform: scale(1.02); }
-            100% { transform: scale(1); opacity: 1; }
-        }
-        .animate-status-pop {
-            animation: statusPop 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        }
-
-        /* Force html5-qrcode video to fit cleanly on iPhone Safari */
-        #qr-reader {
-            border: none !important;
-            width: 100% !important;
-        }
-        #qr-reader video {
-            width: 100% !important;
-            height: auto !important;
-            max-height: 320px !important;
-            object-fit: cover !important;
-            border-radius: 1rem !important;
-        }
-    </style>
+    /* Barra inferior estilo iOS */
+    .nav-tabs {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(17, 19, 34, 0.94);
+      backdrop-filter: blur(12px);
+      border-top: 1px solid var(--card-border);
+      display: flex;
+      justify-content: space-around;
+      padding: 8px 0 env(safe-area-inset-bottom, 12px);
+      z-index: 100;
+    }
+    .nav-btn {
+      background: none;
+      border: none;
+      color: #8898aa;
+      font-size: 0.7rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+    }
+    .nav-btn i { font-size: 1.15rem; }
+    .nav-btn.active { color: var(--primary); }
+  </style>
 </head>
-<body class="min-h-screen flex flex-col">
+<body>
 
-    <!-- COMPACT MOBILE-FIRST ARGON HEADER -->
-    <header class="argon-ios-header pt-3 pb-4 px-4 border-b border-white/10 sticky top-0 z-30 shadow-lg">
-        <div class="max-w-lg mx-auto">
-            <!-- Top Row: Brand & Sound / Sync Triggers -->
-            <div class="flex items-center justify-between gap-2">
-                <div class="flex items-center gap-2.5">
-                    <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-argon-orange to-amber-600 flex items-center justify-center shadow-glow-orange border border-white/20 shrink-0">
-                        <i class="fa-solid fa-ghost text-lg text-white"></i>
-                    </div>
-                    <div>
-                        <div class="flex items-center gap-1.5">
-                            <span class="px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-wider rounded-full bg-argon-orange/25 text-argon-orange border border-argon-orange/40">
-                                iOS Edition
-                            </span>
-                            <span class="text-[11px] font-semibold text-indigo-200">
-                                <i class="fa-brands fa-apple mr-0.5"></i>iPhone Ready
-                            </span>
-                        </div>
-                        <h1 class="text-lg font-extrabold text-white leading-tight">
-                            Verificador QR <span class="text-argon-orange">Halloween</span>
-                        </h1>
-                    </div>
-                </div>
+  <header class="header">
+    <div class="header-title">
+      <i class="fa-solid fa-ghost" style="color: var(--warning)"></i>
+      <span>Validador Halloween</span>
+    </div>
+    <span class="badge-event">Party 5.0</span>
+  </header>
 
-                <!-- Right Quick Buttons -->
-                <div class="flex items-center gap-1.5">
-                    <button id="btnToggleSound" onclick="toggleSound()" class="btn-ios w-10 h-10 rounded-xl bg-slate-900/75 border border-white/15 flex items-center justify-center text-argon-success" title="Sonido de alerta">
-                        <i id="soundIcon" class="fa-solid fa-volume-high text-sm"></i>
-                    </button>
-                    <button onclick="exportAttendanceCSV()" class="btn-ios px-3 h-10 rounded-xl bg-argon-success text-slate-950 font-extrabold text-xs flex items-center gap-1.5 shadow-md" title="Exportar asistencia CSV">
-                        <i class="fa-solid fa-file-export"></i>
-                        <span class="hidden xs:inline">Exportar</span>
-                    </button>
-                </div>
-            </div>
+  <!-- Métricas rápidas -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-label">Lista</div>
+      <div class="stat-val" id="stat-total" style="color:#5e72e4;">0</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Adentro</div>
+      <div class="stat-val" id="stat-in" style="color:#2dce89;">0</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Faltan</div>
+      <div class="stat-val" id="stat-left" style="color:#fb6340;">0</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Alertas</div>
+      <div class="stat-val" id="stat-alerts" style="color:#f5365c;">0</div>
+    </div>
+  </div>
 
-            <!-- Compact 4-Column KPI Strip for iPhone -->
-            <div class="grid grid-cols-4 gap-2 mt-3">
-                <div onclick="switchView('list'); setListFilter('all')" class="cursor-pointer rounded-xl bg-slate-950/55 border border-white/10 p-2 text-center">
-                    <div class="text-[10px] font-bold uppercase text-slate-400">Lista</div>
-                    <div id="kpiTotal" class="text-lg font-extrabold text-white leading-tight">0</div>
-                </div>
-                <div onclick="switchView('list'); setListFilter('checked')" class="cursor-pointer rounded-xl bg-emerald-950/50 border border-argon-success/30 p-2 text-center">
-                    <div class="text-[10px] font-bold uppercase text-emerald-300">Adentro</div>
-                    <div id="kpiCheckedIn" class="text-lg font-extrabold text-argon-success leading-tight">0</div>
-                </div>
-                <div onclick="switchView('list'); setListFilter('pending')" class="cursor-pointer rounded-xl bg-amber-950/40 border border-argon-orange/30 p-2 text-center">
-                    <div class="text-[10px] font-bold uppercase text-amber-300">Faltan</div>
-                    <div id="kpiPending" class="text-lg font-extrabold text-argon-warning leading-tight">0</div>
-                </div>
-                <div onclick="switchView('history')" class="cursor-pointer rounded-xl bg-rose-950/50 border border-argon-danger/30 p-2 text-center">
-                    <div class="text-[10px] font-bold uppercase text-rose-300">Alertas</div>
-                    <div id="kpiAlerts" class="text-lg font-extrabold text-argon-danger leading-tight">0</div>
-                </div>
-            </div>
-
-            <!-- Mini Progress Bar -->
-            <div class="mt-2.5 flex items-center gap-2">
-                <div class="flex-1 h-1.5 bg-slate-950/80 rounded-full overflow-hidden">
-                    <div id="progressBar" class="h-full bg-gradient-to-r from-argon-primary via-argon-orange to-argon-success transition-all duration-300" style="width: 0%"></div>
-                </div>
-                <span id="progressPercentText" class="text-[11px] font-extrabold text-emerald-300 shrink-0">0%</span>
-            </div>
-        </div>
-    </header>
-
-    <!-- MAIN MOBILE VIEWPORT CONTAINER -->
-    <main class="max-w-lg w-full mx-auto px-3.5 pt-3.5 flex-1 flex flex-col gap-3.5">
-
-        <!-- ALWAYS-VISIBLE TOP VERIFICATION STATUS BANNER (Crucial for Door Security on iPhone) -->
-        <section id="verificationBanner" class="argon-card rounded-2xl p-4 border-2 border-slate-700/80 transition-all duration-200">
-            <div class="flex items-center justify-between mb-2">
-                <span class="text-[10px] font-extrabold uppercase tracking-widest text-slate-300 flex items-center gap-1.5">
-                    <span id="statusDot" class="w-2.5 h-2.5 rounded-full bg-argon-primary animate-pulse"></span>
-                    Resultado de Validación QR
-                </span>
-                <span id="statusTime" class="text-[11px] font-mono text-slate-400">--:--:--</span>
-            </div>
-
-            <div id="verificationBody" class="rounded-xl p-3.5 bg-slate-950/75 border border-white/10 text-center">
-                <div class="flex items-center justify-center gap-3">
-                    <div class="w-11 h-11 rounded-2xl bg-argon-primary/20 border border-argon-primary/40 text-argon-primary flex items-center justify-center shrink-0">
-                        <i class="fa-solid fa-qrcode text-xl"></i>
-                    </div>
-                    <div class="text-left">
-                        <h2 class="text-sm font-extrabold text-white">Listo para Escanear en iPhone</h2>
-                        <p class="text-xs text-slate-400">
-                            Valida <strong class="text-slate-200">Nombres</strong> y <strong class="text-slate-200">Apellidos</strong> contra tu lista de Google Forms.
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- ===================================================================
-             VIEW 1: ESCÁNER QR (DEFAULT MOBILE VIEW)
-             =================================================================== -->
-        <section id="view-scanner" class="flex flex-col gap-3.5">
-
-            <!-- PRIMARY iOS CAMERA CONTROLS CARD -->
-            <div class="argon-card rounded-2xl p-4">
-                <div class="flex items-center justify-between gap-2 mb-3">
-                    <div>
-                        <h3 class="text-sm font-extrabold text-white flex items-center gap-1.5">
-                            <i class="fa-solid fa-camera text-argon-orange"></i>
-                            Escáner QR para iPhone
-                        </h3>
-                        <p class="text-[11px] text-slate-400">Usa cámara en vivo o foto instantánea nativa de iOS</p>
-                    </div>
-                    <div class="flex items-center gap-1.5">
-                        <!-- Torch / Flashlight button (shown if supported by iPhone lens) -->
-                        <button id="btnTorch" onclick="toggleTorch()" class="hidden btn-ios w-9 h-9 rounded-xl bg-amber-500/20 border border-amber-400/40 text-amber-300 items-center justify-center" title="Linterna / Flash">
-                            <i class="fa-solid fa-bolt"></i>
-                        </button>
-                        <!-- Switch camera lens button -->
-                        <button id="btnSwitchCam" onclick="switchCameraLens()" class="hidden btn-ios w-9 h-9 rounded-xl bg-slate-800 border border-white/15 text-slate-200 items-center justify-center" title="Cambiar lente de cámara">
-                            <i class="fa-solid fa-camera-rotate"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Dual iOS Action Buttons: Live Stream + Native iPhone Camera Capture -->
-                <div class="grid grid-cols-2 gap-2.5 mb-3">
-                    <button id="btnLiveCamera" onclick="toggleLiveCamera()" class="btn-ios py-3 px-3 rounded-xl bg-argon-primary text-white font-extrabold text-xs flex items-center justify-center gap-2 shadow-glow-indigo">
-                        <i class="fa-solid fa-video text-sm"></i>
-                        <span>Cámara en Vivo</span>
-                    </button>
-
-                    <!-- Native iOS Camera Fallback (Works 100% even on local files without HTTPS) -->
-                    <label for="iosNativeCameraInput" class="btn-ios cursor-pointer py-3 px-3 rounded-xl bg-gradient-to-r from-argon-orange to-amber-600 text-white font-extrabold text-xs flex items-center justify-center gap-2 shadow-glow-orange text-center">
-                        <i class="fa-solid fa-camera-retro text-sm"></i>
-                        <span>Cámara Nativa iOS</span>
-                        <input id="iosNativeCameraInput" type="file" accept="image/*" capture="environment" class="hidden" onchange="handleImageQrScan(event, 'Cámara Nativa iPhone')">
-                    </label>
-                </div>
-
-                <!-- Secondary Option: Pick QR screenshot from iPhone Photos -->
-                <div class="mb-3">
-                    <label for="iosGalleryInput" class="btn-ios cursor-pointer w-full py-2 px-3 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-white/10 text-slate-300 font-bold text-xs flex items-center justify-center gap-2">
-                        <i class="fa-regular fa-images text-argon-info"></i>
-                        <span>Subir Captura QR desde Fotos del iPhone</span>
-                        <input id="iosGalleryInput" type="file" accept="image/*" class="hidden" onchange="handleImageQrScan(event, 'Galería Fotos iPhone')">
-                    </label>
-                </div>
-
-                <!-- Live Camera Viewport Container -->
-                <div class="relative rounded-2xl overflow-hidden bg-slate-950 border border-slate-800 min-h-[220px] flex flex-col items-center justify-center">
-                    <div id="scannerLaser" class="scanner-laser hidden"></div>
-                    <div id="qr-reader" class="w-full"></div>
-                    <!-- Hidden div used exclusively for decoding single photos when live stream is active/inactive -->
-                    <div id="qr-file-reader" class="hidden"></div>
-
-                    <div id="cameraPlaceholder" class="p-5 text-center flex flex-col items-center justify-center">
-                        <div class="w-14 h-14 rounded-2xl bg-slate-900 border border-slate-700 flex items-center justify-center text-argon-orange mb-2.5">
-                            <i class="fa-solid fa-qrcode text-2xl"></i>
-                        </div>
-                        <p class="text-xs font-extrabold text-slate-200">Lector Óptico en Espera</p>
-                        <p class="text-[11px] text-slate-400 mt-1 max-w-xs">
-                            Toca <strong class="text-white">"Cámara en Vivo"</strong> para escaneo continuo o <strong class="text-argon-orange">"Cámara Nativa iOS"</strong> para tomar foto directa al QR.
-                        </p>
-                    </div>
-                </div>
-
-                <!-- Quick Manual Check-In by Nombres / Apellidos -->
-                <form onsubmit="handleManualCheckIn(event)" class="mt-3.5 pt-3.5 border-t border-white/10">
-                    <label class="block text-[11px] font-extrabold uppercase tracking-wider text-slate-300 mb-1.5">
-                        <i class="fa-solid fa-magnifying-glass text-argon-info mr-1"></i>
-                        Verificación Rápida por Nombres y Apellidos
-                    </label>
-                    <div class="flex gap-2">
-                        <input
-                            id="manualVerifyInput"
-                            type="text"
-                            placeholder="Ej. Sofía Valentina Pérez Gómez..."
-                            class="flex-1 px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-white placeholder-slate-500 focus:outline-none focus:border-argon-primary"
-                            autocomplete="off"
-                        >
-                        <button type="submit" class="btn-ios px-4 py-2.5 rounded-xl bg-argon-success text-slate-950 font-extrabold text-xs uppercase tracking-wider shrink-0 flex items-center gap-1.5">
-                            <i class="fa-solid fa-check-double"></i>
-                            <span>Validar</span>
-                        </button>
-                    </div>
-                </form>
-
-                <!-- Quick Test Simulator Bar (To verify sound & states on iPhone immediately) -->
-                <div class="mt-3.5 pt-3 border-t border-white/10">
-                    <div class="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-2 flex items-center justify-between">
-                        <span><i class="fa-solid fa-flask text-argon-orange mr-1"></i>Probar los 3 Estados en Pantalla:</span>
-                        <span class="text-slate-500">Simulador QR</span>
-                    </div>
-                    <div class="grid grid-cols-3 gap-2">
-                        <button type="button" onclick="simulateState('valid')" class="btn-ios py-2 px-2 rounded-xl bg-argon-success/15 border border-argon-success/40 text-argon-success text-xs font-extrabold flex items-center justify-center gap-1">
-                            <i class="fa-solid fa-circle-check"></i>
-                            <span>1. Válido</span>
-                        </button>
-                        <button type="button" onclick="simulateState('duplicate')" class="btn-ios py-2 px-2 rounded-xl bg-argon-orange/15 border border-argon-orange/40 text-argon-orange text-xs font-extrabold flex items-center justify-center gap-1">
-                            <i class="fa-solid fa-triangle-exclamation"></i>
-                            <span>2. Duplicado</span>
-                        </button>
-                        <button type="button" onclick="simulateState('invalid')" class="btn-ios py-2 px-2 rounded-xl bg-argon-danger/15 border border-argon-danger/40 text-argon-danger text-xs font-extrabold flex items-center justify-center gap-1">
-                            <i class="fa-solid fa-ban"></i>
-                            <span>3. Sin Entrada</span>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- ===================================================================
-             VIEW 2: LISTA DE INVITADOS (NOMBRES Y APELLIDOS)
-             =================================================================== -->
-        <section id="view-list" class="hidden flex-col gap-3.5">
-            <div class="argon-card rounded-2xl p-4">
-                <div class="flex items-center justify-between gap-2 pb-3 border-b border-white/10">
-                    <div>
-                        <h3 class="text-sm font-extrabold text-white">
-                            Lista Google Forms (<span id="listTotalCount">0</span>)
-                        </h3>
-                        <p class="text-[11px] text-slate-400">Columnas detectadas: <strong>Nombres</strong> + <strong>Apellidos</strong></p>
-                    </div>
-                    <button onclick="openDoorRegisterModal('', '')" class="btn-ios px-3 py-2 rounded-xl bg-argon-orange text-white text-xs font-extrabold flex items-center gap-1.5">
-                        <i class="fa-solid fa-user-plus"></i>
-                        <span>+ Agregar</span>
-                    </button>
-                </div>
-
-                <!-- Search by Nombres or Apellidos -->
-                <div class="mt-3 relative">
-                    <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400">
-                        <i class="fa-solid fa-magnifying-glass text-xs"></i>
-                    </span>
-                    <input
-                        id="guestSearchInput"
-                        type="text"
-                        oninput="renderGuestList()"
-                        placeholder="Buscar por Nombres o Apellidos..."
-                        class="w-full pl-9 pr-9 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-white placeholder-slate-500 focus:outline-none focus:border-argon-primary"
-                    >
-                </div>
-
-                <!-- Filter Pills -->
-                <div class="grid grid-cols-3 gap-1.5 bg-slate-950 p-1 rounded-xl border border-slate-800 mt-2.5">
-                    <button id="listFilter-all" onclick="setListFilter('all')" class="py-1.5 rounded-lg text-xs font-extrabold bg-argon-primary text-white transition">
-                        Todos
-                    </button>
-                    <button id="listFilter-pending" onclick="setListFilter('pending')" class="py-1.5 rounded-lg text-xs font-extrabold text-slate-400 transition">
-                        Pendientes
-                    </button>
-                    <button id="listFilter-checked" onclick="setListFilter('checked')" class="py-1.5 rounded-lg text-xs font-extrabold text-slate-400 transition">
-                        Adentro
-                    </button>
-                </div>
-
-                <!-- Mobile Card List of Guests -->
-                <div id="guestListContainer" class="mt-3 space-y-2 max-h-[54vh] overflow-y-auto pr-0.5">
-                    <!-- Populated via JS -->
-                </div>
-
-                <!-- Quick Reset Footer -->
-                <div class="mt-4 pt-3 border-t border-white/10 flex items-center justify-between text-xs">
-                    <button onclick="resetAllCheckins()" class="text-amber-400 font-bold flex items-center gap-1">
-                        <i class="fa-solid fa-rotate-left"></i> Reiniciar Ingresos
-                    </button>
-                    <button onclick="restoreDemoData()" class="text-indigo-300 font-bold flex items-center gap-1">
-                        <i class="fa-solid fa-wand-magic-sparkles"></i> Lista Demo
-                    </button>
-                </div>
-            </div>
-        </section>
-
-        <!-- ===================================================================
-             VIEW 3: IMPORTAR GOOGLE FORMS (DETECCIÓN NOMBRES + APELLIDOS)
-             =================================================================== -->
-        <section id="view-import" class="hidden flex-col gap-3.5">
-            <div class="argon-card rounded-2xl p-4 space-y-4">
-                <div class="border-b border-white/10 pb-3">
-                    <span class="px-2 py-0.5 text-[10px] font-extrabold uppercase rounded-full bg-argon-primary/25 text-indigo-300 border border-argon-primary/40">
-                        Google Forms / Sheets
-                    </span>
-                    <h3 class="text-base font-extrabold text-white mt-1">
-                        Sincronizar Columnas <span class="text-argon-orange">Nombres</span> y <span class="text-argon-success">Apellidos</span>
-                    </h3>
-                    <p class="text-xs text-slate-400 mt-0.5">
-                        Sube el archivo CSV de respuestas o pega directamente las columnas desde Google Sheets en tu iPhone.
-                    </p>
-                </div>
-
-                <!-- Mode Selector Tabs -->
-                <div class="grid grid-cols-2 gap-1.5 bg-slate-950 p-1 rounded-xl border border-slate-800">
-                    <button id="importModeBtn-csv" onclick="setImportMode('csv')" class="py-2 rounded-lg text-xs font-extrabold bg-argon-primary text-white">
-                        <i class="fa-solid fa-file-csv mr-1"></i>1. Subir Archivo CSV
-                    </button>
-                    <button id="importModeBtn-paste" onclick="setImportMode('paste')" class="py-2 rounded-lg text-xs font-extrabold text-slate-400">
-                        <i class="fa-solid fa-paste mr-1"></i>2. Pegar Columnas
-                    </button>
-                </div>
-
-                <!-- SUB-VIEW A: CSV FILE UPLOAD & COLUMN DETECTOR -->
-                <div id="importPanelCsv" class="space-y-3.5">
-                    <div class="p-4 rounded-2xl bg-slate-950/80 border border-dashed border-argon-primary/50 text-center">
-                        <i class="fa-solid fa-cloud-arrow-up text-2xl text-argon-primary mb-1.5"></i>
-                        <p class="text-xs font-bold text-white">Selecciona el CSV de tu Google Forms</p>
-                        <p class="text-[11px] text-slate-400 mt-0.5 mb-3">
-                            Detecta automáticamente las columnas <strong>Nombres</strong> y <strong>Apellidos</strong>
-                        </p>
-                        <div class="flex flex-wrap justify-center gap-2">
-                            <label for="csvFileInput" class="btn-ios cursor-pointer px-4 py-2.5 rounded-xl bg-argon-primary text-white text-xs font-extrabold inline-flex items-center gap-1.5">
-                                <i class="fa-solid fa-folder-open"></i>
-                                <span>Elegir CSV en iPhone</span>
-                                <input id="csvFileInput" type="file" accept=".csv,text/csv,text/plain" class="hidden" onchange="handleCsvUpload(event)">
-                            </label>
-                            <button type="button" onclick="downloadSampleFormsCSV()" class="btn-ios px-3 py-2.5 rounded-xl bg-slate-800 text-slate-200 border border-white/10 text-xs font-bold inline-flex items-center gap-1.5">
-                                <i class="fa-solid fa-download text-argon-orange"></i>
-                                <span>CSV Ejemplo</span>
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Interactive Column Mapper (Revealed when CSV is loaded) -->
-                    <div id="csvMapperBox" class="hidden p-3.5 rounded-2xl bg-slate-950 border border-argon-success/40 space-y-3">
-                        <div class="flex items-center justify-between">
-                            <span class="text-xs font-extrabold text-argon-success flex items-center gap-1.5">
-                                <i class="fa-solid fa-circle-check"></i>
-                                Columnas Detectadas
-                            </span>
-                            <span id="csvRowCountBadge" class="text-[11px] font-bold text-slate-300 bg-slate-800 px-2 py-0.5 rounded-full">0 filas</span>
-                        </div>
-
-                        <div class="grid grid-cols-1 gap-2.5">
-                            <div>
-                                <label class="block text-[11px] font-extrabold uppercase text-argon-orange mb-1">
-                                    1. Columna de NOMBRES *
-                                </label>
-                                <select id="colSelectNombres" onchange="updateCsvPreview()" class="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs"></select>
-                            </div>
-                            <div>
-                                <label class="block text-[11px] font-extrabold uppercase text-argon-success mb-1">
-                                    2. Columna de APELLIDOS *
-                                </label>
-                                <select id="colSelectApellidos" onchange="updateCsvPreview()" class="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs"></select>
-                            </div>
-                            <div>
-                                <label class="block text-[11px] font-bold uppercase text-slate-400 mb-1">
-                                    3. Columna Extra: Correo / Entrada (Opcional)
-                                </label>
-                                <select id="colSelectInfo" onchange="updateCsvPreview()" class="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs"></select>
-                            </div>
-                        </div>
-
-                        <!-- Live Preview of First 3 Parsed Rows -->
-                        <div class="p-2.5 rounded-xl bg-slate-900/90 border border-white/10">
-                            <div class="text-[10px] font-extrabold uppercase text-slate-400 mb-1.5">
-                                Vista Previa (Nombres + Apellidos):
-                            </div>
-                            <div id="csvPreviewRows" class="space-y-1 text-xs"></div>
-                        </div>
-
-                        <label class="flex items-center gap-2 text-xs text-slate-300 cursor-pointer pt-1">
-                            <input id="csvReplaceAll" type="checkbox" class="rounded bg-slate-900 border-slate-700 text-argon-primary">
-                            <span>Reemplazar lista actual por completo</span>
-                        </label>
-
-                        <button type="button" onclick="confirmCsvImport()" class="btn-ios w-full py-3 rounded-xl bg-argon-success text-slate-950 font-extrabold text-xs uppercase tracking-wider flex items-center justify-center gap-2">
-                            <i class="fa-solid fa-check-double"></i>
-                            <span>Importar Compradores Ahora</span>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- SUB-VIEW B: COPY-PASTE DIRECTLY FROM GOOGLE SHEETS (NOMBRES + APELLIDOS) -->
-                <div id="importPanelPaste" class="hidden space-y-3">
-                    <div class="p-3 rounded-xl bg-slate-950/70 border border-white/10 text-xs text-slate-300 space-y-1">
-                        <p class="font-bold text-white"><i class="fa-solid fa-table-columns text-argon-orange mr-1"></i>Formato Inteligente de 2 Columnas:</p>
-                        <p class="text-[11px] text-slate-400">
-                            Copia las celdas de <strong>Nombres</strong> y <strong>Apellidos</strong> directamente desde Google Sheets o Excel y pégalas abajo (acepta separación por tabulación, coma o punto y coma).
-                        </p>
-                    </div>
-
-                    <textarea
-                        id="pasteColumnsInput"
-                        rows="6"
-                        oninput="updatePastePreview()"
-                        placeholder="Nombres&#9;Apellidos&#10;Sofía Valentina&#9;Pérez Gómez&#10;Mateo Sebastián&#9;Villalba Castro&#10;Camila Andrea, Espinoza Ruiz"
-                        class="w-full p-3 rounded-xl bg-slate-950 border border-slate-700 text-white placeholder-slate-500 focus:outline-none focus:border-argon-primary font-mono text-xs"
-                    ></textarea>
-
-                    <div id="pastePreviewBox" class="hidden p-2.5 rounded-xl bg-slate-950 border border-white/10">
-                        <div class="text-[10px] font-extrabold uppercase text-emerald-400 mb-1">
-                            Detección en Vivo (<span id="pasteDetectedCount">0</span> personas):
-                        </div>
-                        <div id="pastePreviewList" class="space-y-1 text-xs max-h-28 overflow-y-auto"></div>
-                    </div>
-
-                    <label class="flex items-center gap-2 text-xs text-slate-300 cursor-pointer">
-                        <input id="pasteReplaceAll" type="checkbox" class="rounded bg-slate-900 border-slate-700 text-argon-primary">
-                        <span>Reemplazar lista existente</span>
-                    </label>
-
-                    <button type="button" onclick="confirmPasteImport()" class="btn-ios w-full py-3 rounded-xl bg-argon-primary text-white font-extrabold text-xs uppercase tracking-wider flex items-center justify-center gap-2">
-                        <i class="fa-solid fa-bolt"></i>
-                        <span>Guardar Nombres y Apellidos</span>
-                    </button>
-                </div>
-            </div>
-        </section>
-
-        <!-- ===================================================================
-             VIEW 4: HISTORIAL DE ESCANEOS Y ALERTAS EN PUERTA
-             =================================================================== -->
-        <section id="view-history" class="hidden flex-col gap-3.5">
-            <div class="argon-card rounded-2xl p-4">
-                <div class="flex items-center justify-between pb-3 border-b border-white/10">
-                    <div>
-                        <h3 class="text-sm font-extrabold text-white">Historial de Puerta</h3>
-                        <p class="text-[11px] text-slate-400">
-                            Duplicados: <strong id="histDupCount" class="text-argon-orange">0</strong> • Sin Entrada: <strong id="histInvCount" class="text-argon-danger">0</strong>
-                        </p>
-                    </div>
-                    <button onclick="clearHistoryLogs()" class="btn-ios px-3 py-1.5 rounded-xl bg-slate-800 text-slate-300 text-xs font-bold">
-                        Limpiar
-                    </button>
-                </div>
-
-                <div id="historyListContainer" class="mt-3 space-y-2 max-h-[60vh] overflow-y-auto">
-                    <!-- Populated via JS -->
-                </div>
-            </div>
-        </section>
-
-    </main>
-
-    <!-- MODAL: REGISTRAR COMPRADOR EN PUERTA (NOMBRES + APELLIDOS) -->
-    <div id="modalDoorRegister" class="fixed inset-0 z-50 hidden bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-4">
-        <div class="argon-card rounded-2xl max-w-sm w-full p-5 border border-white/15 shadow-2xl">
-            <div class="flex items-center justify-between pb-3 border-b border-white/10">
-                <div class="flex items-center gap-2">
-                    <div class="w-8 h-8 rounded-xl bg-argon-orange/20 border border-argon-orange/40 text-argon-orange flex items-center justify-center">
-                        <i class="fa-solid fa-user-plus text-sm"></i>
-                    </div>
-                    <h3 class="text-sm font-extrabold text-white">Agregar a Lista Oficial</h3>
-                </div>
-                <button onclick="closeDoorRegisterModal()" class="w-8 h-8 rounded-lg bg-slate-800 text-slate-300 flex items-center justify-center">
-                    <i class="fa-solid fa-xmark"></i>
-                </button>
-            </div>
-
-            <form onsubmit="submitDoorRegister(event)" class="mt-3.5 space-y-3">
-                <div>
-                    <label class="block text-[11px] font-extrabold uppercase text-argon-orange mb-1">Nombres *</label>
-                    <input id="inputDoorNombres" type="text" required placeholder="Ej. Sofía Valentina" class="w-full px-3 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-white focus:outline-none focus:border-argon-primary">
-                </div>
-                <div>
-                    <label class="block text-[11px] font-extrabold uppercase text-argon-success mb-1">Apellidos *</label>
-                    <input id="inputDoorApellidos" type="text" required placeholder="Ej. Pérez Gómez" class="w-full px-3 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-white focus:outline-none focus:border-argon-primary">
-                </div>
-                <div>
-                    <label class="block text-[11px] font-bold uppercase text-slate-400 mb-1">Nota / Tipo de Entrada</label>
-                    <input id="inputDoorInfo" type="text" placeholder="Ej. Preventa VIP / Puerta" class="w-full px-3 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-white focus:outline-none focus:border-argon-primary">
-                </div>
-
-                <label class="flex items-center gap-2 text-xs text-slate-200 cursor-pointer pt-1">
-                    <input id="inputDoorCheckInNow" type="checkbox" checked class="rounded bg-slate-900 border-slate-700 text-argon-success">
-                    <span>Marcar como <strong>INGRESÓ AHORA</strong></span>
-                </label>
-
-                <div class="grid grid-cols-2 gap-2 pt-2">
-                    <button type="button" onclick="closeDoorRegisterModal()" class="btn-ios py-2.5 rounded-xl bg-slate-800 text-slate-300 text-xs font-bold">
-                        Cancelar
-                    </button>
-                    <button type="submit" class="btn-ios py-2.5 rounded-xl bg-argon-success text-slate-950 text-xs font-extrabold">
-                        Guardar Registro
-                    </button>
-                </div>
-            </form>
-        </div>
+  <!-- VISTA 1: ESCÁNER QR -->
+  <main id="view-scanner" class="view-section active">
+    <div id="reader-container">
+      <div id="reader"></div>
     </div>
 
-    <!-- FLOATING TOAST NOTIFICATIONS -->
-    <div id="toastContainer" class="fixed top-4 left-1/2 -translate-x-1/2 z-50 flex flex-col gap-2 max-w-sm w-[92%] pointer-events-none"></div>
+    <button class="btn btn-primary" id="btn-toggle-cam" onclick="toggleCamera()">
+      <i class="fa-solid fa-camera"></i> Iniciar Cámara
+    </button>
 
-    <!-- iOS BOTTOM NAVIGATION TAB BAR -->
-    <nav class="ios-tab-bar fixed bottom-0 inset-x-0 z-40">
-        <div class="max-w-lg mx-auto grid grid-cols-4 px-2 pt-1.5">
-            <button id="navTab-scanner" onclick="switchView('scanner')" class="btn-ios py-1.5 flex flex-col items-center justify-center gap-1 text-argon-orange">
-                <i class="fa-solid fa-qrcode text-lg"></i>
-                <span class="text-[10px] font-extrabold">Escáner QR</span>
-            </button>
-            <button id="navTab-list" onclick="switchView('list')" class="btn-ios py-1.5 flex flex-col items-center justify-center gap-1 text-slate-400">
-                <div class="relative">
-                    <i class="fa-solid fa-users text-lg"></i>
-                    <span id="navBadgePending" class="absolute -top-1.5 -right-3 px-1.5 py-0.2 text-[9px] font-extrabold rounded-full bg-argon-primary text-white">0</span>
-                </div>
-                <span class="text-[10px] font-bold">Lista Forms</span>
-            </button>
-            <button id="navTab-import" onclick="switchView('import')" class="btn-ios py-1.5 flex flex-col items-center justify-center gap-1 text-slate-400">
-                <i class="fa-solid fa-file-csv text-lg"></i>
-                <span class="text-[10px] font-bold">Importar</span>
-            </button>
-            <button id="navTab-history" onclick="switchView('history')" class="btn-ios py-1.5 flex flex-col items-center justify-center gap-1 text-slate-400">
-                <div class="relative">
-                    <i class="fa-solid fa-clock-rotate-left text-lg"></i>
-                    <span id="navBadgeAlerts" class="hidden absolute -top-1.5 -right-2.5 px-1.5 text-[9px] font-extrabold rounded-full bg-argon-danger text-white">0</span>
-                </div>
-                <span class="text-[10px] font-bold">Historial</span>
-            </button>
+    <div style="margin-top: 14px;">
+      <div class="result-box" id="result-box">
+        <div class="result-icon" id="res-icon"><i class="fa-solid fa-qrcode"></i></div>
+        <div class="result-status" id="res-status" style="color: #adb5bd;">Listo para escanear</div>
+        <div class="result-name" id="res-name">Apunta al código QR</div>
+        <div class="result-detail" id="res-detail">Los códigos con enlace se resolverán automáticamente</div>
+      </div>
+    </div>
+  </main>
+
+  <!-- VISTA 2: LISTA DE REGISTRADOS -->
+  <main id="view-list" class="view-section">
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+      <h3 style="margin: 0; font-size: 1rem;">Asistentes Registrados</h3>
+      <span id="badge-count" style="font-size:0.75rem; color:#8898aa;">0 personas</span>
+    </div>
+    <div class="guest-list" id="guest-items-container">
+      <div style="text-align:center; padding: 25px; color:#8898aa;">No hay asistentes cargados. Ve a "Importar".</div>
+    </div>
+  </main>
+
+  <!-- VISTA 3: IMPORTAR DATOS -->
+  <main id="view-import" class="view-section">
+    <h3 style="margin-top:0; font-size: 1rem;">Cargar Lista de Google Forms</h3>
+    
+    <label style="font-size:0.8rem; color:#adb5bd;">Opción A: Subir archivo CSV de respuestas</label>
+    <input type="file" id="csv-file-input" accept=".csv" style="margin: 8px 0; width:100%; color:#adb5bd;" onchange="handleCSVFile(event)">
+
+    <div style="margin: 16px 0; text-align: center; color: #8898aa; font-size: 0.8rem;">— O BIEN —</div>
+
+    <label style="font-size:0.8rem; color:#adb5bd;">Opción B: Pegar columnas (Nombres y Apellidos)</label>
+    <textarea id="paste-input" placeholder="Pega aquí la lista de nombres y apellidos directamente desde tu Excel o Google Sheets..."></textarea>
+    
+    <button class="btn btn-success" onclick="processPastedText()">
+      <i class="fa-solid fa-file-import"></i> Procesar Lista Pegada
+    </button>
+
+    <button class="btn btn-warning" onclick="clearData()" style="margin-top: 14px;">
+      <i class="fa-solid fa-trash"></i> Borrar Todo y Reiniciar
+    </button>
+  </main>
+
+  <!-- VISTA 4: HISTORIAL -->
+  <main id="view-history" class="view-section">
+    <h3 style="margin-top:0; font-size: 1rem;">Historial de Escaneos</h3>
+    <div class="guest-list" id="scan-log-container">
+      <div style="text-align:center; padding: 25px; color:#8898aa;">Aún no se han realizado escaneos.</div>
+    </div>
+  </main>
+
+  <!-- Navegación Inferior -->
+  <nav class="nav-tabs">
+    <button class="nav-btn active" onclick="switchTab('scanner', this)">
+      <i class="fa-solid fa-qrcode"></i>
+      <span>Escáner</span>
+    </button>
+    <button class="nav-btn" onclick="switchTab('list', this)">
+      <i class="fa-solid fa-users"></i>
+      <span>Lista</span>
+    </button>
+    <button class="nav-btn" onclick="switchTab('import', this)">
+      <i class="fa-solid fa-file-arrow-up"></i>
+      <span>Importar</span>
+    </button>
+    <button class="nav-btn" onclick="switchTab('history', this)">
+      <i class="fa-solid fa-clock-rotate-left"></i>
+      <span>Historial</span>
+    </button>
+  </nav>
+
+  <script>
+    let registeredGuests = JSON.parse(localStorage.getItem('hw_guests') || '[]');
+    let scanLogs = JSON.parse(localStorage.getItem('hw_logs') || '[]');
+    let urlCache = JSON.parse(localStorage.getItem('hw_url_cache') || '{}');
+    let alertCount = parseInt(localStorage.getItem('hw_alerts') || '0');
+
+    let html5QrCode = null;
+    let cameraActive = false;
+    let isProcessing = false;
+
+    // Normalizar texto para comparaciones (sin tildes, minúsculas)
+    function cleanStr(str) {
+      return (str || '')
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/[^a-z0-9]/g, " ")
+        .replace(/\s+/g, " ")
+        .trim();
+    }
+
+    function updateStats() {
+      const total = registeredGuests.length;
+      const inside = registeredGuests.filter(g => g.entered).length;
+      document.getElementById('stat-total').textContent = total;
+      document.getElementById('stat-in').textContent = inside;
+      document.getElementById('stat-left').textContent = Math.max(0, total - inside);
+      document.getElementById('stat-alerts').textContent = alertCount;
+      document.getElementById('badge-count').textContent = `${total} registrados`;
+      renderList();
+      renderLogs();
+    }
+
+    function switchTab(viewId, btn) {
+      document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
+      document.getElementById('view-' + viewId).classList.add('active');
+      btn.classList.add('active');
+    }
+
+    // LECTOR DE CÁMARA
+    async function toggleCamera() {
+      const btn = document.getElementById('btn-toggle-cam');
+      if (!html5QrCode) {
+        html5QrCode = new Html5Qrcode("reader");
+      }
+
+      if (cameraActive) {
+        await html5QrCode.stop();
+        cameraActive = false;
+        btn.innerHTML = '<i class="fa-solid fa-camera"></i> Iniciar Cámara';
+        btn.className = 'btn btn-primary';
+      } else {
+        try {
+          await html5QrCode.start(
+            { facingMode: "environment" },
+            { fps: 10, qrbox: { width: 230, height: 230 } },
+            onScanSuccess,
+            () => {}
+          );
+          cameraActive = true;
+          btn.innerHTML = '<i class="fa-solid fa-stop"></i> Detener Cámara';
+          btn.className = 'btn btn-warning';
+        } catch (err) {
+          alert("Error al iniciar cámara: Asegúrate de otorgar permisos en Safari.");
+        }
+      }
+    }
+
+    // RESOLVER CONTENIDO DE GENERATORQR.COM
+    async function resolveExternalQR(url) {
+      if (urlCache[url]) {
+        return urlCache[url];
+      }
+      try {
+        // Proxy CORS para extraer el HTML que renderiza generatorqr
+        const proxyUrl = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(url);
+        const resp = await fetch(proxyUrl);
+        const html = await resp.text();
+        const doc = new DOMParser().parseFromString(html, 'text/html');
+
+        // Extraer texto visible relevante
+        const bodyText = doc.body.innerText || '';
+        const lines = bodyText.split('\n').map(l => l.trim()).filter(l => l.length > 2);
+        
+        // Buscar coincidencia directa de líneas con nuestra lista
+        for (const line of lines) {
+          const match = registeredGuests.find(g => cleanStr(g.fullName) === cleanStr(line) || cleanStr(line).includes(cleanStr(g.fullName)));
+          if (match) {
+            urlCache[url] = match.fullName;
+            localStorage.setItem('hw_url_cache', JSON.stringify(urlCache));
+            return match.fullName;
+          }
+        }
+        
+        // Si no encontró coincidencia directa, devolver la línea más representativa
+        const candidate = lines.find(l => !l.toLowerCase().includes('qr') && !l.toLowerCase().includes('scan') && l.length > 4) || url;
+        urlCache[url] = candidate;
+        localStorage.setItem('hw_url_cache', JSON.stringify(urlCache));
+        return candidate;
+      } catch (e) {
+        return url;
+      }
+    }
+
+    // PROCESAR ESCANEO
+    async function onScanSuccess(decodedText) {
+      if (isProcessing) return;
+      isProcessing = true;
+
+      const box = document.getElementById('result-box');
+      const icon = document.getElementById('res-icon');
+      const status = document.getElementById('res-status');
+      const nameEl = document.getElementById('res-name');
+      const detail = document.getElementById('res-detail');
+
+      let query = decodedText.trim();
+
+      // Si es un enlace de generatorqr.com, mostrar estado de carga
+      if (query.includes('generatorqr.com') || query.startsWith('http')) {
+        box.className = 'result-box loading';
+        icon.innerHTML = '<i class="fa-solid fa-spinner fa-spin" style="color:var(--primary)"></i>';
+        status.textContent = 'Consultando entrada...';
+        status.style.color = 'var(--primary)';
+        nameEl.textContent = 'Decodificando QR';
+        detail.textContent = 'Extrayendo datos de compra...';
+
+        query = await resolveExternalQR(query);
+      }
+
+      const cleanQuery = cleanStr(query);
+
+      // Buscar en asistentes registrados
+      const foundIndex = registeredGuests.findIndex(g => {
+        const full = cleanStr(g.fullName);
+        const inv = cleanStr(g.lastName + ' ' + g.firstName);
+        return full === cleanQuery || inv === cleanQuery || cleanQuery.includes(full) || (full.length > 5 && full.includes(cleanQuery));
+      });
+
+      const now = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+
+      if (foundIndex !== -1) {
+        const guest = registeredGuests[foundIndex];
+        if (guest.entered) {
+          // DUPLICADO
+          box.className = 'result-box duplicate';
+          icon.innerHTML = '<i class="fa-solid fa-triangle-exclamation" style="color:var(--warning)"></i>';
+          status.textContent = '¡Entrada Ya Utilizada!';
+          status.style.color = 'var(--warning)';
+          nameEl.textContent = guest.fullName;
+          detail.textContent = `Ingresó previamente a las: ${guest.timeEntered}`;
+          alertCount++;
+          logScan('DUPLICADO', guest.fullName, now);
+        } else {
+          // ACCESO CORRECTO
+          guest.entered = true;
+          guest.timeEntered = now;
+          localStorage.setItem('hw_guests', JSON.stringify(registeredGuests));
+
+          box.className = 'result-box valid';
+          icon.innerHTML = '<i class="fa-solid fa-circle-check" style="color:var(--success)"></i>';
+          status.textContent = 'Acceso Autorizado';
+          status.style.color = 'var(--success)';
+          nameEl.textContent = guest.fullName;
+          detail.textContent = `Verificado a las: ${now}`;
+          logScan('ACCESO', guest.fullName, now);
+        }
+      } else {
+        // NO ENCONTRADO
+        box.className = 'result-box invalid';
+        icon.innerHTML = '<i class="fa-solid fa-circle-xmark" style="color:var(--danger)"></i>';
+        status.textContent = 'Acceso Denegado';
+        status.style.color = 'var(--danger)';
+        nameEl.textContent = query.length > 40 ? query.substring(0, 37) + '...' : query;
+        detail.textContent = 'No coincide con ningún registro en la lista de Forms';
+        alertCount++;
+        logScan('DENEGADO', query, now);
+      }
+
+      localStorage.setItem('hw_alerts', alertCount);
+      updateStats();
+
+      // Pausa de 3.5 segundos antes de permitir el próximo escaneo
+      setTimeout(() => { isProcessing = false; }, 3500);
+    }
+
+    function logScan(tipo, nombre, hora) {
+      scanLogs.unshift({ tipo, nombre, hora });
+      if (scanLogs.length > 60) scanLogs.pop();
+      localStorage.setItem('hw_logs', JSON.stringify(scanLogs));
+    }
+
+    // IMPORTACIÓN DESDE ARCHIVO CSV
+    function handleCSVFile(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(evt) {
+        const text = evt.target.result;
+        const lines = text.split(/\r\n|\n/).filter(l => l.trim().length > 0);
+        if (lines.length < 2) {
+          alert("El archivo CSV no contiene suficientes filas.");
+          return;
+        }
+
+        const headers = lines[0].split(',').map(h => h.trim().toLowerCase());
+        let fnIdx = headers.findIndex(h => h.includes('nombre'));
+        let lnIdx = headers.findIndex(h => h.includes('apellido'));
+
+        if (fnIdx === -1) fnIdx = 1; // Asignación por defecto
+        if (lnIdx === -1) lnIdx = 2;
+
+        const newGuests = [];
+        for (let i = 1; i < lines.length; i++) {
+          const cols = lines[i].split(',').map(c => c.replace(/"/g, '').trim());
+          const fn = cols[fnIdx] || '';
+          const ln = cols[lnIdx] || '';
+          const full = `${fn} ${ln}`.trim();
+          if (full.length > 2) {
+            newGuests.push({ firstName: fn, lastName: ln, fullName: full, entered: false, timeEntered: null });
+          }
+        }
+
+        saveImportedList(newGuests);
+      };
+      reader.readAsText(file);
+    }
+
+    // IMPORTACIÓN DESDE TEXTO PEGADO
+    function processPastedText() {
+      const val = document.getElementById('paste-input').value.trim();
+      if (!val) {
+        alert("Pega primero la lista de nombres.");
+        return;
+      }
+      const lines = val.split('\n').filter(l => l.trim().length > 0);
+      const newGuests = [];
+
+      lines.forEach(line => {
+        const parts = line.split('\t').map(p => p.trim());
+        let fn = '', ln = '', full = '';
+        if (parts.length >= 2) {
+          fn = parts[0];
+          ln = parts[1];
+          full = `${fn} ${ln}`.trim();
+        } else {
+          full = line.trim();
+        }
+        if (full.length > 2) {
+          newGuests.push({ firstName: fn, lastName: ln, fullName: full, entered: false, timeEntered: null });
+        }
+      });
+
+      saveImportedList(newGuests);
+    }
+
+    function saveImportedList(list) {
+      registeredGuests = list;
+      localStorage.setItem('hw_guests', JSON.stringify(registeredGuests));
+      alert(`¡Éxito! Se cargaron ${registeredGuests.length} asistentes.`);
+      updateStats();
+      switchTab('scanner', document.querySelector('.nav-btn'));
+    }
+
+    function clearData() {
+      if (confirm("¿Estás seguro de que deseas borrar toda la lista y los registros de entrada?")) {
+        localStorage.clear();
+        registeredGuests = [];
+        scanLogs = [];
+        urlCache = {};
+        alertCount = 0;
+        updateStats();
+        alert("Datos reiniciados.");
+      }
+    }
+
+    function renderList() {
+      const cont = document.getElementById('guest-items-container');
+      if (registeredGuests.length === 0) {
+        cont.innerHTML = '<div style="text-align:center; padding: 25px; color:#8898aa;">No hay asistentes cargados. Ve a "Importar".</div>';
+        return;
+      }
+      cont.innerHTML = registeredGuests.map(g => `
+        <div class="guest-item ${g.entered ? 'in' : ''}">
+          <div>
+            <div class="guest-name">${g.fullName}</div>
+            <div class="guest-sub">${g.entered ? 'Adentro - ' + g.timeEntered : 'Sin ingresar'}</div>
+          </div>
+          <div>
+            ${g.entered 
+              ? '<i class="fa-solid fa-check" style="color:var(--success)"></i>' 
+              : '<i class="fa-solid fa-clock" style="color:#8898aa"></i>'}
+          </div>
         </div>
-    </nav>
-
-    <script>
-        /********************************************************************
-         * 1. STATE & INITIAL GOOGLE FORMS DEMO DATA (NOMBRES + APELLIDOS)
-         ********************************************************************/
-        const STORAGE_KEY_GUESTS = 'argon_ios_halloween_guests_v2';
-        const STORAGE_KEY_LOGS = 'argon_ios_halloween_logs_v2';
-        const STORAGE_KEY_STATS = 'argon_ios_halloween_stats_v2';
-
-        const INITIAL_DEMO_GUESTS = [
-            { id: 'g-1', nombres: 'Sofía Valentina', apellidos: 'Pérez Gómez', info: 'Preventa VIP • Google Forms', checkedIn: false, checkInTime: null, attempts: 0 },
-            { id: 'g-2', nombres: 'Alejandro Mateo', apellidos: 'Gómez Andrade', info: 'General • Google Forms', checkedIn: true, checkInTime: '21:15:10', attempts: 1 },
-            { id: 'g-3', nombres: 'Camila Andrea', apellidos: 'Torres Villalba', info: 'Preventa VIP • Google Forms', checkedIn: false, checkInTime: null, attempts: 0 },
-            { id: 'g-4', nombres: 'Carlos Sebastián', apellidos: 'Mendoza Ruiz', info: 'General • Google Forms', checkedIn: true, checkInTime: '21:24:02', attempts: 1 },
-            { id: 'g-5', nombres: 'Lucía Fernanda', apellidos: 'Castro Morales', info: 'General • Google Forms', checkedIn: false, checkInTime: null, attempts: 0 },
-            { id: 'g-6', nombres: 'Diego Nicolás', apellidos: 'Ramírez Paredes', info: 'VIP Halloween • Google Forms', checkedIn: false, checkInTime: null, attempts: 0 },
-            { id: 'g-7', nombres: 'Mariana Belén', apellidos: 'Herrera Espinoza', info: 'General • Google Forms', checkedIn: false, checkInTime: null, attempts: 0 },
-            { id: 'g-8', nombres: 'Andrés Felipe', apellidos: 'Vega Cevallos', info: 'Preventa • Google Forms', checkedIn: false, checkInTime: null, attempts: 0 }
-        ];
-
-        let guests = [];
-        let scanLogs = [];
-        let alertStats = { duplicates: 0, invalid: 0 };
-        let currentListFilter = 'all';
-        let soundEnabled = true;
-
-        // Camera & Scanner State for iOS Safari
-        let html5QrScanner = null;
-        let isCameraActive = false;
-        let availableCameras = [];
-        let currentCameraIndex = 0;
-        let torchOn = false;
-        let lastQrText = '';
-        let lastQrTime = 0;
-
-        // CSV Import Buffer
-        let rawCsvRows = [];
-
-        /********************************************************************
-         * 2. SMART NORMALIZATION & "NOMBRES + APELLIDOS" QR MATCHING ENGINE
-         ********************************************************************/
-        function normalizeText(str) {
-            if (!str) return '';
-            return String(str)
-                .normalize('NFD')
-                .replace(/[\u0300-\u036f]/g, '') // Strip Spanish accents (áéíóúñ -> aeioun)
-                .toLowerCase()
-                .replace(/[^a-z0-9\s]/g, ' ')    // Replace punctuation/separators with space
-                .replace(/\s+/g, ' ')
-                .trim();
-        }
-
-        function getFullName(person) {
-            return `${person.nombres || ''} ${person.apellidos || ''}`.replace(/\s+/g, ' ').trim();
-        }
-
-        /**
-         * Parses a QR code payload that may contain:
-         * - Plain full name: "Sofía Valentina Pérez Gómez" or "Pérez Gómez Sofía Valentina"
-         * - Labeled format: "Nombres: Sofía | Apellidos: Pérez"
-         * - JSON format: {"nombres": "Sofía", "apellidos": "Pérez"}
-         */
-        function extractQrIdentity(rawPayload) {
-            let text = String(rawPayload || '').trim();
-
-            // Check if JSON
-            if (text.startsWith('{') && text.endsWith('}')) {
-                try {
-                    const obj = JSON.parse(text);
-                    const n = obj.nombres || obj.nombre || obj.firstName || '';
-                    const a = obj.apellidos || obj.apellido || obj.lastName || '';
-                    const full = obj.nombreCompleto || obj.fullName || `${n} ${a}`;
-                    return {
-                        extractedNombres: normalizeText(n),
-                        extractedApellidos: normalizeText(a),
-                        cleanedFull: normalizeText(full)
-                    };
-                } catch (e) {
-                    // Fallback to text parsing
-                }
-            }
-
-            // Check labeled patterns like "Nombres: Juan | Apellidos: Perez"
-            const nombresMatch = text.match(/(?:nombres?|first\s*name)\s*[:=]\s*([^|;\n,]+)/i);
-            const apellidosMatch = text.match(/(?:apellidos?|last\s*name)\s*[:=]\s*([^|;\n,]+)/i);
-
-            if (nombresMatch && apellidosMatch) {
-                const n = normalizeText(nombresMatch[1]);
-                const a = normalizeText(apellidosMatch[1]);
-                return {
-                    extractedNombres: n,
-                    extractedApellidos: a,
-                    cleanedFull: `${n} ${a}`.trim()
-                };
-            }
-
-            // Strip generic single prefixes like "ENTRADA:", "QR:", "ASISTENTE:", "NOMBRE:"
-            const stripped = text.replace(/^(?:codigo\s*qr|entrada|ticket|asistente|invitado|nombre\s*completo|nombres?\s*y\s*apellidos?|nombre)\s*[:=-]\s*/i, '');
-            return {
-                extractedNombres: '',
-                extractedApellidos: '',
-                cleanedFull: normalizeText(stripped)
-            };
-        }
-
-        /**
-         * Finds a matching guest in the Google Forms list by checking:
-         * 1. Exact match on Nombres + Apellidos or Apellidos + Nombres
-         * 2. Explicit match on extracted Nombres & Apellidos fields
-         * 3. Token inclusion: All words in the QR match the guest's Nombres + Apellidos (requires at least 1 token from Nombres and 1 from Apellidos)
-         */
-        function findMatchingGuestIndex(rawPayload) {
-            const { extractedNombres, extractedApellidos, cleanedFull } = extractQrIdentity(rawPayload);
-            if (!cleanedFull) return -1;
-
-            const qrTokens = cleanedFull.split(' ').filter(Boolean);
-
-            for (let i = 0; i < guests.length; i++) {
-                const g = guests[i];
-                const normNombres = normalizeText(g.nombres);
-                const normApellidos = normalizeText(g.apellidos);
-                const forwardFull = `${normNombres} ${normApellidos}`.replace(/\s+/g, ' ').trim();
-                const reverseFull = `${normApellidos} ${normNombres}`.replace(/\s+/g, ' ').trim();
-
-                // 1. Direct full match (Nombres + Apellidos OR Apellidos + Nombres)
-                if (cleanedFull === forwardFull || cleanedFull === reverseFull) {
-                    return i;
-                }
-
-                // 2. Structured Nombres & Apellidos match
-                if (extractedNombres && extractedApellidos) {
-                    if (extractedNombres === normNombres && extractedApellidos === normApellidos) {
-                        return i;
-                    }
-                }
-
-                // 3. Smart Multi-Token Match (e.g., QR has "Sofia Perez" and Google Forms has Nombres="Sofía Valentina", Apellidos="Pérez Gómez")
-                const nombresTokens = normNombres.split(' ').filter(Boolean);
-                const apellidosTokens = normApellidos.split(' ').filter(Boolean);
-                const allGuestTokens = [...nombresTokens, ...apellidosTokens];
-
-                if (qrTokens.length >= 2) {
-                    const allQrTokensInGuest = qrTokens.every(t => allGuestTokens.includes(t));
-                    const hasAtLeastOneNombre = qrTokens.some(t => nombresTokens.includes(t));
-                    const hasAtLeastOneApellido = qrTokens.some(t => apellidosTokens.includes(t));
-
-                    if (allQrTokensInGuest && hasAtLeastOneNombre && hasAtLeastOneApellido) {
-                        return i;
-                    }
-                }
-            }
-
-            return -1;
-        }
-
-        function splitFullNameIntoColumns(fullNameStr) {
-            const clean = String(fullNameStr || '').trim().replace(/\s+/g, ' ');
-            if (!clean) return { nombres: '', apellidos: '' };
-            const parts = clean.split(' ');
-            if (parts.length === 1) {
-                return { nombres: parts[0], apellidos: '(Sin Apellido)' };
-            }
-            if (parts.length === 2) {
-                return { nombres: parts[0], apellidos: parts[1] };
-            }
-            if (parts.length === 3) {
-                return { nombres: parts[0], apellidos: `${parts[1]} ${parts[2]}` };
-            }
-            const half = Math.ceil(parts.length / 2);
-            return {
-                nombres: parts.slice(0, half).join(' '),
-                apellidos: parts.slice(half).join(' ')
-            };
-        }
-
-        function getTimeString() {
-            return new Date().toTimeString().split(' ')[0];
-        }
-
-        /********************************************************************
-         * 3. iOS SAFARI WEB AUDIO SYNTHESIZER (UNLOCKED ON TOUCH)
-         ********************************************************************/
-        let audioCtx = null;
-
-        function ensureAudioUnlocked() {
-            if (!soundEnabled) return;
-            try {
-                if (!audioCtx) {
-                    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
-                    audioCtx = new AudioContextClass();
-                }
-                if (audioCtx.state === 'suspended') {
-                    audioCtx.resume();
-                }
-            } catch (e) {}
-        }
-
-        // Unlock Web Audio on first touch anywhere on iPhone screen
-        document.addEventListener('touchstart', ensureAudioUnlocked, { once: true, passive: true });
-        document.addEventListener('click', ensureAudioUnlocked, { once: true, passive: true });
-
-        function playAlertSound(type) {
-            if (!soundEnabled) return;
-            try {
-                ensureAudioUnlocked();
-                if (!audioCtx) return;
-
-                const now = audioCtx.currentTime;
-
-                if (type === 'valid') {
-                    // Bright iOS Apple-Pay style confirmation chime
-                    const freqs = [587.33, 880, 1174.66];
-                    freqs.forEach((f, idx) => {
-                        const osc = audioCtx.createOscillator();
-                        const gain = audioCtx.createGain();
-                        osc.type = 'sine';
-                        osc.frequency.setValueAtTime(f, now + idx * 0.075);
-                        gain.gain.setValueAtTime(0.22, now + idx * 0.075);
-                        gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.075 + 0.25);
-                        osc.connect(gain);
-                        gain.connect(audioCtx.destination);
-                        osc.start(now + idx * 0.075);
-                        osc.stop(now + idx * 0.075 + 0.26);
-                    });
-                } else if (type === 'duplicate') {
-                    // Double amber warning tone
-                    [0, 0.16].forEach(offset => {
-                        const osc = audioCtx.createOscillator();
-                        const gain = audioCtx.createGain();
-                        osc.type = 'triangle';
-                        osc.frequency.setValueAtTime(460, now + offset);
-                        osc.frequency.setValueAtTime(360, now + offset + 0.06);
-                        gain.gain.setValueAtTime(0.25, now + offset);
-                        gain.gain.exponentialRampToValueAtTime(0.001, now + offset + 0.14);
-                        osc.connect(gain);
-                        gain.connect(audioCtx.destination);
-                        osc.start(now + offset);
-                        osc.stop(now + offset + 0.15);
-                    });
-                } else if (type === 'invalid') {
-                    // Low error alarm buzzer
-                    const osc = audioCtx.createOscillator();
-                    const gain = audioCtx.createGain();
-                    osc.type = 'sawtooth';
-                    osc.frequency.setValueAtTime(170, now);
-                    osc.frequency.linearRampToValueAtTime(115, now + 0.35);
-                    gain.gain.setValueAtTime(0.25, now);
-                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.38);
-                    osc.connect(gain);
-                    gain.connect(audioCtx.destination);
-                    osc.start(now);
-                    osc.stop(now + 0.4);
-                }
-            } catch (e) {}
-        }
-
-        function toggleSound() {
-            soundEnabled = !soundEnabled;
-            const btn = document.getElementById('btnToggleSound');
-            const icon = document.getElementById('soundIcon');
-            if (soundEnabled) {
-                btn.className = 'btn-ios w-10 h-10 rounded-xl bg-slate-900/75 border border-white/15 flex items-center justify-center text-argon-success';
-                icon.className = 'fa-solid fa-volume-high text-sm';
-                playAlertSound('valid');
-                showToast('Alertas de sonido activadas en iPhone', 'success');
-            } else {
-                btn.className = 'btn-ios w-10 h-10 rounded-xl bg-slate-900/75 border border-white/15 flex items-center justify-center text-slate-400';
-                icon.className = 'fa-solid fa-volume-xmark text-sm';
-                showToast('Sonido silenciado', 'info');
-            }
-        }
-
-        /********************************************************************
-         * 4. CORE QR VERIFICATION ENGINE (3 STATES: VALID, DUPLICATE, NO TICKET)
-         ********************************************************************/
-        function verifyQrCode(rawPayload, source = 'Escáner iPhone') {
-            const rawText = String(rawPayload || '').trim();
-            if (!rawText) {
-                showToast('El código QR o texto está vacío.', 'warning');
-                return;
-            }
-
-            const nowTime = getTimeString();
-            document.getElementById('statusTime').textContent = nowTime;
-
-            const bannerEl = document.getElementById('verificationBanner');
-            const bodyEl = document.getElementById('verificationBody');
-            const dotEl = document.getElementById('statusDot');
-
-            // Re-trigger pop animation
-            bodyEl.classList.remove('animate-status-pop');
-            void bodyEl.offsetWidth;
-            bodyEl.classList.add('animate-status-pop');
-
-            // Scroll smoothly to top so verification banner is front-and-center on iPhone
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-
-            const matchIdx = findMatchingGuestIndex(rawText);
-
-            // ===============================================================
-            // STATE 3: NOT REGISTERED IN GOOGLE FORMS (SIN ENTRADA COMPRADA)
-            // ===============================================================
-            if (matchIdx === -1) {
-                alertStats.invalid += 1;
-                playAlertSound('invalid');
-
-                const guessedSplit = splitFullNameIntoColumns(rawText);
-
-                bannerEl.className = 'argon-card rounded-2xl p-4 border-2 border-argon-danger shadow-glow-red transition-all duration-200';
-                dotEl.className = 'w-2.5 h-2.5 rounded-full bg-argon-danger animate-ping';
-
-                bodyEl.innerHTML = `
-                    <div class="p-3.5 rounded-xl bg-argon-danger/20 border border-argon-danger/50 text-center">
-                        <div class="w-14 h-14 rounded-2xl bg-argon-danger text-white flex items-center justify-center mx-auto mb-2 shadow-lg">
-                            <i class="fa-solid fa-ban text-2xl"></i>
-                        </div>
-                        <span class="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-argon-danger text-white">
-                            Acceso Denegado • No Tiene Entrada Comprada
-                        </span>
-                        <h2 class="text-lg font-extrabold text-white mt-2 break-words">${escapeHtml(rawText)}</h2>
-                        <p class="text-xs text-rose-200 mt-1 font-semibold">
-                            No coincide con ningún registro de <strong>Nombres y Apellidos</strong> en la lista de Google Forms.
-                        </p>
-                        <button
-                            type="button"
-                            onclick="openDoorRegisterModal('${escapeJs(guessedSplit.nombres)}', '${escapeJs(guessedSplit.apellidos)}')"
-                            class="btn-ios mt-3 w-full py-2.5 px-3 rounded-xl bg-argon-orange text-white text-xs font-extrabold flex items-center justify-center gap-1.5 shadow-md"
-                        >
-                            <i class="fa-solid fa-user-plus"></i>
-                            <span>Registrar Compra en Puerta y Autorizar</span>
-                        </button>
-                    </div>
-                `;
-
-                addHistoryLog({
-                    nombres: guessedSplit.nombres,
-                    apellidos: guessedSplit.apellidos,
-                    raw: rawText,
-                    status: 'invalid',
-                    detail: 'No tiene entrada comprada en Google Forms',
-                    time: nowTime,
-                    source
-                });
-
-                saveState();
-                refreshAllUI();
-                return;
-            }
-
-            const person = guests[matchIdx];
-            person.attempts = (person.attempts || 0) + 1;
-
-            // ===============================================================
-            // STATE 2: DUPLICATE QR CODE (YA INGRESÓ ANTERIORMENTE)
-            // ===============================================================
-            if (person.checkedIn) {
-                alertStats.duplicates += 1;
-                playAlertSound('duplicate');
-
-                bannerEl.className = 'argon-card rounded-2xl p-4 border-2 border-argon-orange shadow-glow-orange transition-all duration-200';
-                dotEl.className = 'w-2.5 h-2.5 rounded-full bg-argon-orange animate-ping';
-
-                bodyEl.innerHTML = `
-                    <div class="p-3.5 rounded-xl bg-argon-orange/20 border border-argon-orange/50 text-center">
-                        <div class="w-14 h-14 rounded-2xl bg-argon-orange text-slate-950 flex items-center justify-center mx-auto mb-2 shadow-lg">
-                            <i class="fa-solid fa-triangle-exclamation text-2xl"></i>
-                        </div>
-                        <span class="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-argon-orange text-slate-950">
-                            ¡Alerta de Duplicación! • QR Ya Utilizado
-                        </span>
-                        <div class="mt-2 space-y-0.5">
-                            <div class="text-xs font-bold text-amber-200 uppercase tracking-wide">Nombres: <span class="text-white">${escapeHtml(person.nombres)}</span></div>
-                            <div class="text-sm font-extrabold text-amber-300 uppercase tracking-wide">Apellidos: <span class="text-white">${escapeHtml(person.apellidos)}</span></div>
-                        </div>
-                        <div class="mt-2.5 py-2 px-3 rounded-xl bg-slate-950/85 border border-argon-orange/40 text-xs text-amber-300 font-bold">
-                            <i class="fa-solid fa-clock mr-1"></i>
-                            Ya ingresó a las <span class="underline text-white">${person.checkInTime}</span> • Intento #${person.attempts}
-                        </div>
-                    </div>
-                `;
-
-                addHistoryLog({
-                    nombres: person.nombres,
-                    apellidos: person.apellidos,
-                    raw: getFullName(person),
-                    status: 'duplicate',
-                    detail: `QR Duplicado (Ingresó a las ${person.checkInTime})`,
-                    time: nowTime,
-                    source
-                });
-
-                saveState();
-                refreshAllUI();
-                return;
-            }
-
-            // ===============================================================
-            // STATE 1: VALID ENTRY (ÉXITO - ENTRADA COMPRADA VERIFICADA)
-            // ===============================================================
-            person.checkedIn = true;
-            person.checkInTime = nowTime;
-            playAlertSound('valid');
-
-            bannerEl.className = 'argon-card rounded-2xl p-4 border-2 border-argon-success shadow-glow-green transition-all duration-200';
-            dotEl.className = 'w-2.5 h-2.5 rounded-full bg-argon-success animate-ping';
-
-            bodyEl.innerHTML = `
-                <div class="p-3.5 rounded-xl bg-argon-success/20 border border-argon-success/50 text-center">
-                    <div class="w-14 h-14 rounded-2xl bg-argon-success text-slate-950 flex items-center justify-center mx-auto mb-2 shadow-lg">
-                        <i class="fa-solid fa-check text-2xl"></i>
-                    </div>
-                    <span class="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-argon-success text-slate-950">
-                        Entrada Válida • Acceso Autorizado
-                    </span>
-                    <div class="mt-2 bg-slate-950/70 rounded-xl p-2.5 border border-argon-success/30 text-left space-y-1">
-                        <div class="flex items-center justify-between text-xs">
-                            <span class="text-slate-400 font-bold uppercase text-[10px]">Nombres:</span>
-                            <span class="font-extrabold text-white text-sm">${escapeHtml(person.nombres)}</span>
-                        </div>
-                        <div class="flex items-center justify-between text-xs border-t border-white/10 pt-1">
-                            <span class="text-slate-400 font-bold uppercase text-[10px]">Apellidos:</span>
-                            <span class="font-extrabold text-argon-success text-sm">${escapeHtml(person.apellidos)}</span>
-                        </div>
-                    </div>
-                    <p class="text-[11px] text-emerald-200 mt-2 font-bold">
-                        <i class="fa-solid fa-door-open mr-1"></i>Ingreso registrado a las ${nowTime} (${escapeHtml(person.info || 'Google Forms')})
-                    </p>
-                </div>
-            `;
-
-            addHistoryLog({
-                nombres: person.nombres,
-                apellidos: person.apellidos,
-                raw: getFullName(person),
-                status: 'valid',
-                detail: 'Entrada verificada exitosamente',
-                time: nowTime,
-                source
-            });
-
-            saveState();
-            refreshAllUI();
-        }
-
-        function handleManualCheckIn(event) {
-            event.preventDefault();
-            const input = document.getElementById('manualVerifyInput');
-            const val = input.value.trim();
-            if (!val) {
-                showToast('Ingresa Nombres y Apellidos para validar.', 'warning');
-                return;
-            }
-            verifyQrCode(val, 'Teclado Manual');
-            input.value = '';
-            input.blur(); // Dismiss iOS keyboard so banner is clearly visible
-        }
-
-        function simulateState(type) {
-            if (type === 'valid') {
-                const nextPending = guests.find(g => !g.checkedIn);
-                if (nextPending) {
-                    verifyQrCode(getFullName(nextPending), 'Simulador iOS');
-                } else {
-                    showToast('Todos los invitados están adentro. Reinicia ingresos o agrega uno nuevo.', 'info');
-                }
-            } else if (type === 'duplicate') {
-                const alreadyIn = guests.find(g => g.checkedIn);
-                if (alreadyIn) {
-                    verifyQrCode(getFullName(alreadyIn), 'Simulador iOS');
-                } else if (guests.length > 0) {
-                    guests[0].checkedIn = true;
-                    guests[0].checkInTime = getTimeString();
-                    verifyQrCode(getFullName(guests[0]), 'Simulador iOS');
-                }
-            } else if (type === 'invalid') {
-                const fakeSamples = [
-                    'Roberto Carlos Fantasma SinTicket',
-                    'Valeria Infiltrada Desconocida',
-                    'Persona No Registrada En Forms'
-                ];
-                const pick = fakeSamples[Math.floor(Math.random() * fakeSamples.length)];
-                verifyQrCode(pick, 'Simulador iOS');
-            }
-        }
-
-        /********************************************************************
-         * 5. iOS SAFARI CAMERA ENGINE (LIVE STREAM + NATIVE PHOTO CAPTURE)
-         ********************************************************************/
-        async function toggleLiveCamera() {
-            const btn = document.getElementById('btnLiveCamera');
-            const placeholder = document.getElementById('cameraPlaceholder');
-            const laser = document.getElementById('scannerLaser');
-            const btnTorch = document.getElementById('btnTorch');
-            const btnSwitch = document.getElementById('btnSwitchCam');
-
-            if (isCameraActive && html5QrScanner) {
-                await stopLiveCamera();
-                return;
-            }
-
-            try {
-                placeholder.classList.add('hidden');
-                laser.classList.remove('hidden');
-
-                if (!html5QrScanner) {
-                    html5QrScanner = new Html5Qrcode('qr-reader');
-                }
-
-                // Fetch available cameras on iPhone if possible
-                try {
-                    availableCameras = await Html5Qrcode.getCameras();
-                    if (availableCameras && availableCameras.length > 1) {
-                        btnSwitch.classList.remove('hidden');
-                        btnSwitch.classList.add('flex');
-                    }
-                } catch (camErr) {
-                    availableCameras = [];
-                }
-
-                const cameraConfig = availableCameras.length > 0 && currentCameraIndex > 0
-                    ? { deviceId: { exact: availableCameras[currentCameraIndex].id } }
-                    : { facingMode: 'environment' };
-
-                await html5QrScanner.start(
-                    cameraConfig,
-                    {
-                        fps: 12,
-                        qrbox: { width: 210, height: 210 },
-                        aspectRatio: 1.0
-                    },
-                    (decodedText) => {
-                        const now = Date.now();
-                        // Debounce 2.6 seconds for the same QR code so iPhone doesn't trigger Duplicate 100ms after Valid
-                        if (decodedText === lastQrText && (now - lastQrTime) < 2600) {
-                            return;
-                        }
-                        lastQrText = decodedText;
-                        lastQrTime = now;
-                        verifyQrCode(decodedText, 'Cámara Live iPhone');
-                    },
-                    () => {}
-                );
-
-                // Ensure iOS Safari inline video attributes are strictly applied
-                const videoEl = document.querySelector('#qr-reader video');
-                if (videoEl) {
-                    videoEl.setAttribute('playsinline', 'true');
-                    videoEl.setAttribute('webkit-playsinline', 'true');
-                    videoEl.setAttribute('muted', 'true');
-                }
-
-                // Check if torch is supported
-                try {
-                    const capabilities = html5QrScanner.getRunningTrackCameraCapabilities();
-                    if (capabilities && capabilities.torchFeature && capabilities.torchFeature().isSupported()) {
-                        btnTorch.classList.remove('hidden');
-                        btnTorch.classList.add('flex');
-                    }
-                } catch (e) {}
-
-                isCameraActive = true;
-                btn.innerHTML = '<i class="fa-solid fa-video-slash text-sm"></i><span>Detener Cámara</span>';
-                btn.className = 'btn-ios py-3 px-3 rounded-xl bg-argon-danger text-white font-extrabold text-xs flex items-center justify-center gap-2 shadow-glow-red';
-            } catch (err) {
-                placeholder.classList.remove('hidden');
-                laser.classList.add('hidden');
-                showToast('Si abriste el archivo sin HTTPS en Safari, usa el botón naranja "Cámara Nativa iOS".', 'warning');
-            }
-        }
-
-        async function stopLiveCamera() {
-            const btn = document.getElementById('btnLiveCamera');
-            const placeholder = document.getElementById('cameraPlaceholder');
-            const laser = document.getElementById('scannerLaser');
-            const btnTorch = document.getElementById('btnTorch');
-            const btnSwitch = document.getElementById('btnSwitchCam');
-
-            if (html5QrScanner && isCameraActive) {
-                try {
-                    await html5QrScanner.stop();
-                    html5QrScanner.clear();
-                } catch (e) {}
-            }
-            isCameraActive = false;
-            torchOn = false;
-            placeholder.classList.remove('hidden');
-            laser.classList.add('hidden');
-            btnTorch.classList.add('hidden');
-            btnSwitch.classList.add('hidden');
-            btn.innerHTML = '<i class="fa-solid fa-video text-sm"></i><span>Cámara en Vivo</span>';
-            btn.className = 'btn-ios py-3 px-3 rounded-xl bg-argon-primary text-white font-extrabold text-xs flex items-center justify-center gap-2 shadow-glow-indigo';
-        }
-
-        async function switchCameraLens() {
-            if (!availableCameras || availableCameras.length < 2) return;
-            currentCameraIndex = (currentCameraIndex + 1) % availableCameras.length;
-            await stopLiveCamera();
-            await toggleLiveCamera();
-        }
-
-        async function toggleTorch() {
-            if (!html5QrScanner || !isCameraActive) return;
-            try {
-                const capabilities = html5QrScanner.getRunningTrackCameraCapabilities();
-                if (capabilities && capabilities.torchFeature) {
-                    torchOn = !torchOn;
-                    await capabilities.torchFeature().apply(torchOn);
-                }
-            } catch (e) {
-                showToast('Linterna no disponible en este lente.', 'info');
-            }
-        }
-
-        /**
-         * Decodes a QR from the iPhone Native Camera (`capture="environment"`) or Photo Library
-         */
-        async function handleImageQrScan(event, sourceLabel) {
-            const file = event.target.files && event.target.files[0];
-            if (!file) return;
-
-            try {
-                const fileScanner = new Html5Qrcode('qr-file-reader');
-                const decodedText = await fileScanner.scanFile(file, false);
-                fileScanner.clear();
-                verifyQrCode(decodedText, sourceLabel);
-            } catch (err) {
-                playAlertSound('invalid');
-                showToast('No se detectó un código QR nítido en la foto. Acércate un poco más e intenta de nuevo.', 'danger');
-            } finally {
-                event.target.value = '';
-            }
-        }
-
-        /********************************************************************
-         * 6. GOOGLE FORMS IMPORT: DETECCIÓN DE COLUMNAS "NOMBRES" Y "APELLIDOS"
-         ********************************************************************/
-        function setImportMode(mode) {
-            const csvPanel = document.getElementById('importPanelCsv');
-            const pastePanel = document.getElementById('importPanelPaste');
-            const btnCsv = document.getElementById('importModeBtn-csv');
-            const btnPaste = document.getElementById('importModeBtn-paste');
-
-            if (mode === 'csv') {
-                csvPanel.classList.remove('hidden');
-                pastePanel.classList.add('hidden');
-                btnCsv.className = 'py-2 rounded-lg text-xs font-extrabold bg-argon-primary text-white';
-                btnPaste.className = 'py-2 rounded-lg text-xs font-extrabold text-slate-400';
-            } else {
-                csvPanel.classList.add('hidden');
-                pastePanel.classList.remove('hidden');
-                btnPaste.className = 'py-2 rounded-lg text-xs font-extrabold bg-argon-primary text-white';
-                btnCsv.className = 'py-2 rounded-lg text-xs font-extrabold text-slate-400';
-            }
-        }
-
-        function parseCSVMatrix(text) {
-            const rows = [];
-            let row = [];
-            let cell = '';
-            let inQuotes = false;
-
-            for (let i = 0; i < text.length; i++) {
-                const ch = text[i];
-                const next = text[i + 1];
-
-                if (inQuotes) {
-                    if (ch === '"' && next === '"') {
-                        cell += '"';
-                        i++;
-                    } else if (ch === '"') {
-                        inQuotes = false;
-                    } else {
-                        cell += ch;
-                    }
-                } else {
-                    if (ch === '"') {
-                        inQuotes = true;
-                    } else if (ch === ',' || ch === ';' || ch === '\t') {
-                        row.push(cell.trim());
-                        cell = '';
-                    } else if (ch === '\n' || (ch === '\r' && next === '\n')) {
-                        if (ch === '\r') i++;
-                        row.push(cell.trim());
-                        if (row.some(c => c !== '')) rows.push(row);
-                        row = [];
-                        cell = '';
-                    } else {
-                        cell += ch;
-                    }
-                }
-            }
-            if (cell || row.length > 0) {
-                row.push(cell.trim());
-                if (row.some(c => c !== '')) rows.push(row);
-            }
-            return rows;
-        }
-
-        function handleCsvUpload(event) {
-            const file = event.target.files && event.target.files[0];
-            if (!file) return;
-
-            const reader = new FileReader();
-            reader.onload = function (e) {
-                const text = e.target.result;
-                const matrix = parseCSVMatrix(text);
-                if (matrix.length < 2) {
-                    showToast('El archivo CSV no contiene suficientes filas.', 'danger');
-                    return;
-                }
-
-                rawCsvRows = matrix;
-                const headers = matrix[0];
-
-                const selNombres = document.getElementById('colSelectNombres');
-                const selApellidos = document.getElementById('colSelectApellidos');
-                const selInfo = document.getElementById('colSelectInfo');
-
-                selNombres.innerHTML = '';
-                selApellidos.innerHTML = '<option value="-1">-- Misma columna de Nombres (Separar automático) --</option>';
-                selInfo.innerHTML = '<option value="-1">-- Ninguna --</option>';
-
-                let detectedNombresIdx = 0;
-                let detectedApellidosIdx = -1;
-                let detectedInfoIdx = -1;
-
-                headers.forEach((h, idx) => {
-                    const label = h || `Columna ${idx + 1}`;
-                    const norm = normalizeText(label);
-
-                    if (norm.includes('nombre') || norm.includes('first name') || norm.includes('primer nombre')) {
-                        detectedNombresIdx = idx;
-                    }
-                    if (norm.includes('apellido') || norm.includes('last name') || norm.includes('segundo')) {
-                        detectedApellidosIdx = idx;
-                    }
-                    if (norm.includes('correo') || norm.includes('email') || norm.includes('entrada') || norm.includes('tipo') || norm.includes('telefono') || norm.includes('celular')) {
-                        detectedInfoIdx = idx;
-                    }
-
-                    selNombres.insertAdjacentHTML('beforeend', `<option value="${idx}">${escapeHtml(label)}</option>`);
-                    selApellidos.insertAdjacentHTML('beforeend', `<option value="${idx}">${escapeHtml(label)}</option>`);
-                    selInfo.insertAdjacentHTML('beforeend', `<option value="${idx}">${escapeHtml(label)}</option>`);
-                });
-
-                selNombres.value = String(detectedNombresIdx);
-                selApellidos.value = String(detectedApellidosIdx);
-                selInfo.value = String(detectedInfoIdx);
-
-                document.getElementById('csvRowCountBadge').textContent = `${matrix.length - 1} registros`;
-                document.getElementById('csvMapperBox').classList.remove('hidden');
-                updateCsvPreview();
-            };
-            reader.readAsText(file, 'UTF-8');
-            event.target.value = '';
-        }
-
-        function updateCsvPreview() {
-            if (rawCsvRows.length < 2) return;
-            const nIdx = parseInt(document.getElementById('colSelectNombres').value, 10);
-            const aIdx = parseInt(document.getElementById('colSelectApellidos').value, 10);
-            const previewEl = document.getElementById('csvPreviewRows');
-
-            const sampleRows = rawCsvRows.slice(1, 4);
-            previewEl.innerHTML = sampleRows.map(row => {
-                let nombres = (row[nIdx] || '').trim();
-                let apellidos = aIdx >= 0 && aIdx !== nIdx ? (row[aIdx] || '').trim() : '';
-
-                if (aIdx === -1 || aIdx === nIdx) {
-                    const split = splitFullNameIntoColumns(nombres);
-                    nombres = split.nombres;
-                    apellidos = split.apellidos;
-                }
-
-                return `
-                    <div class="flex items-center justify-between py-1 px-2 rounded bg-slate-950 border border-white/5">
-                        <span class="text-argon-orange font-bold truncate">${escapeHtml(nombres || '—')}</span>
-                        <span class="text-argon-success font-extrabold truncate ml-2">${escapeHtml(apellidos || '—')}</span>
-                    </div>
-                `;
-            }).join('');
-        }
-
-        function confirmCsvImport() {
-            if (rawCsvRows.length < 2) return;
-            const nIdx = parseInt(document.getElementById('colSelectNombres').value, 10);
-            const aIdx = parseInt(document.getElementById('colSelectApellidos').value, 10);
-            const infoIdx = parseInt(document.getElementById('colSelectInfo').value, 10);
-            const replaceAll = document.getElementById('csvReplaceAll').checked;
-
-            if (replaceAll) guests = [];
-
-            let added = 0;
-            let skipped = 0;
-
-            for (let i = 1; i < rawCsvRows.length; i++) {
-                const row = rawCsvRows[i];
-                let nombres = (row[nIdx] || '').trim();
-                let apellidos = aIdx >= 0 && aIdx !== nIdx ? (row[aIdx] || '').trim() : '';
-
-                if (!nombres && !apellidos) continue;
-
-                if (aIdx === -1 || aIdx === nIdx) {
-                    const split = splitFullNameIntoColumns(nombres);
-                    nombres = split.nombres;
-                    apellidos = split.apellidos;
-                }
-
-                const candidateFull = normalizeText(`${nombres} ${apellidos}`);
-                const exists = guests.some(g => normalizeText(getFullName(g)) === candidateFull);
-                if (exists) {
-                    skipped++;
-                    continue;
-                }
-
-                const info = infoIdx >= 0 && row[infoIdx] ? row[infoIdx].trim() : 'Google Forms CSV';
-                guests.push({
-                    id: 'g-' + Date.now() + '-' + i,
-                    nombres,
-                    apellidos,
-                    info,
-                    checkedIn: false,
-                    checkInTime: null,
-                    attempts: 0
-                });
-                added++;
-            }
-
-            saveState();
-            refreshAllUI();
-            document.getElementById('csvMapperBox').classList.add('hidden');
-            showToast(`Importados ${added} compradores con Nombres y Apellidos (${skipped} omitidos por duplicidad).`, 'success');
-            switchView('list');
-        }
-
-        function parsePastedLines(rawText) {
-            const lines = String(rawText || '').split(/\r?\n/).map(l => l.trim()).filter(Boolean);
-            const parsed = [];
-
-            lines.forEach((line, idx) => {
-                // Skip header line if user pasted "Nombres   Apellidos"
-                const normLine = normalizeText(line);
-                if (idx === 0 && normLine.includes('nombre') && normLine.includes('apellido')) {
-                    return;
-                }
-
-                let cols = [];
-                if (line.includes('\t')) {
-                    cols = line.split('\t').map(c => c.trim()).filter(Boolean);
-                } else if (line.includes(';')) {
-                    cols = line.split(';').map(c => c.trim()).filter(Boolean);
-                } else if (line.includes(',')) {
-                    cols = line.split(',').map(c => c.trim()).filter(Boolean);
-                }
-
-                if (cols.length >= 2) {
-                    parsed.push({
-                        nombres: cols[0],
-                        apellidos: cols[1],
-                        info: cols[2] || 'Google Sheets'
-                    });
-                } else {
-                    const split = splitFullNameIntoColumns(line);
-                    if (split.nombres) {
-                        parsed.push({
-                            nombres: split.nombres,
-                            apellidos: split.apellidos,
-                            info: 'Google Sheets'
-                        });
-                    }
-                }
-            });
-
-            return parsed;
-        }
-
-        function updatePastePreview() {
-            const raw = document.getElementById('pasteColumnsInput').value;
-            const parsed = parsePastedLines(raw);
-            const box = document.getElementById('pastePreviewBox');
-            const countEl = document.getElementById('pasteDetectedCount');
-            const listEl = document.getElementById('pastePreviewList');
-
-            if (parsed.length === 0) {
-                box.classList.add('hidden');
-                return;
-            }
-
-            box.classList.remove('hidden');
-            countEl.textContent = parsed.length;
-            listEl.innerHTML = parsed.slice(0, 6).map(p => `
-                <div class="flex items-center justify-between py-1 px-2 rounded bg-slate-900 border border-white/5">
-                    <span class="text-argon-orange font-bold truncate">${escapeHtml(p.nombres)}</span>
-                    <span class="text-argon-success font-extrabold truncate ml-2">${escapeHtml(p.apellidos)}</span>
-                </div>
-            `).join('');
-        }
-
-        function confirmPasteImport() {
-            const raw = document.getElementById('pasteColumnsInput').value;
-            const parsed = parsePastedLines(raw);
-            const replaceAll = document.getElementById('pasteReplaceAll').checked;
-
-            if (parsed.length === 0) {
-                showToast('Pega al menos una fila con Nombres y Apellidos.', 'warning');
-                return;
-            }
-
-            if (replaceAll) guests = [];
-
-            let added = 0;
-            parsed.forEach((p, idx) => {
-                const candidateFull = normalizeText(`${p.nombres} ${p.apellidos}`);
-                const exists = guests.some(g => normalizeText(getFullName(g)) === candidateFull);
-                if (!exists) {
-                    guests.push({
-                        id: 'g-' + Date.now() + '-' + idx,
-                        nombres: p.nombres,
-                        apellidos: p.apellidos,
-                        info: p.info,
-                        checkedIn: false,
-                        checkInTime: null,
-                        attempts: 0
-                    });
-                    added++;
-                }
-            });
-
-            document.getElementById('pasteColumnsInput').value = '';
-            document.getElementById('pastePreviewBox').classList.add('hidden');
-            saveState();
-            refreshAllUI();
-            showToast(`Se cargaron ${added} compradores con Nombres y Apellidos.`, 'success');
-            switchView('list');
-        }
-
-        function downloadSampleFormsCSV() {
-            const sample = [
-                ['Marca temporal', 'Nombres', 'Apellidos', 'Tipo de Entrada'],
-                ['2026-10-25 18:10:00', 'Gabriel Alejandro', 'Luna Mora', 'Preventa Halloween'],
-                ['2026-10-25 18:22:14', 'Natalia Estefanía', 'Vega Salazar', 'VIP Brujas'],
-                ['2026-10-25 19:05:40', 'Esteban David', 'Paredes León', 'General'],
-                ['2026-10-25 19:40:12', 'Paula Daniela', 'Ríos Córdova', 'VIP Halloween']
-            ];
-            const csv = sample.map(r => r.map(c => `"${c}"`).join(',')).join('\n');
-            const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'google_forms_nombres_apellidos.csv';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-            showToast('CSV de ejemplo con columnas Nombres y Apellidos descargado.', 'info');
-        }
-
-        /********************************************************************
-         * 7. GUEST LIST MANAGEMENT, DOOR REGISTRATION & EXPORT
-         ********************************************************************/
-        function openDoorRegisterModal(prefillNombres = '', prefillApellidos = '') {
-            document.getElementById('inputDoorNombres').value = prefillNombres;
-            document.getElementById('inputDoorApellidos').value = prefillApellidos;
-            document.getElementById('inputDoorInfo').value = 'Compra en Puerta';
-            document.getElementById('inputDoorCheckInNow').checked = true;
-            document.getElementById('modalDoorRegister').classList.remove('hidden');
-        }
-
-        function closeDoorRegisterModal() {
-            document.getElementById('modalDoorRegister').classList.add('hidden');
-        }
-
-        function submitDoorRegister(event) {
-            event.preventDefault();
-            const nombres = document.getElementById('inputDoorNombres').value.trim();
-            const apellidos = document.getElementById('inputDoorApellidos').value.trim();
-            const info = document.getElementById('inputDoorInfo').value.trim() || 'Registro en Puerta';
-            const checkNow = document.getElementById('inputDoorCheckInNow').checked;
-
-            if (!nombres || !apellidos) return;
-
-            const candidateFull = normalizeText(`${nombres} ${apellidos}`);
-            const existingIdx = guests.findIndex(g => normalizeText(getFullName(g)) === candidateFull);
-
-            if (existingIdx !== -1) {
-                showToast('Esta persona ya existe en la lista oficial.', 'warning');
-                return;
-            }
-
-            const newPerson = {
-                id: 'g-' + Date.now(),
-                nombres,
-                apellidos,
-                info,
-                checkedIn: false,
-                checkInTime: null,
-                attempts: 0
-            };
-
-            guests.unshift(newPerson);
-            closeDoorRegisterModal();
-
-            if (checkNow) {
-                verifyQrCode(`${nombres} ${apellidos}`, 'Registro en Puerta');
-            } else {
-                saveState();
-                refreshAllUI();
-                showToast(`${nombres} ${apellidos} agregado a la lista.`, 'success');
-            }
-        }
-
-        function toggleGuestStatus(guestId) {
-            const person = guests.find(g => g.id === guestId);
-            if (!person) return;
-
-            if (!person.checkedIn) {
-                // Validate them right now
-                verifyQrCode(getFullName(person), 'Check-in Lista');
-            } else {
-                // Revert check-in
-                person.checkedIn = false;
-                person.checkInTime = null;
-                person.attempts = 0;
-                saveState();
-                refreshAllUI();
-                showToast(`Ingreso revertido para ${getFullName(person)}.`, 'info');
-            }
-        }
-
-        function removeGuest(guestId) {
-            const idx = guests.findIndex(g => g.id === guestId);
-            if (idx === -1) return;
-            const removed = guests.splice(idx, 1)[0];
-            saveState();
-            refreshAllUI();
-            showToast(`${getFullName(removed)} eliminado de la lista.`, 'info');
-        }
-
-        function resetAllCheckins() {
-            guests.forEach(g => {
-                g.checkedIn = false;
-                g.checkInTime = null;
-                g.attempts = 0;
-            });
-            alertStats = { duplicates: 0, invalid: 0 };
-            saveState();
-            refreshAllUI();
-            showToast('Todos los registros volvieron a estado Pendiente.', 'info');
-        }
-
-        function restoreDemoData() {
-            guests = JSON.parse(JSON.stringify(INITIAL_DEMO_GUESTS));
-            scanLogs = [];
-            alertStats = { duplicates: 0, invalid: 0 };
-            saveState();
-            refreshAllUI();
-            showToast('Lista de demostración restaurada.', 'success');
-        }
-
-        function exportAttendanceCSV() {
-            const headers = ['Nombres', 'Apellidos', 'Nombre Completo (QR)', 'Detalle / Google Forms', 'Estado', 'Hora de Ingreso', 'Intentos Escaneo'];
-            const rows = guests.map(g => [
-                g.nombres,
-                g.apellidos,
-                getFullName(g),
-                g.info || '',
-                g.checkedIn ? 'INGRESÓ' : 'PENDIENTE',
-                g.checkInTime || '--:--:--',
-                String(g.attempts || 0)
-            ]);
-
-            const csv = [headers, ...rows]
-                .map(r => r.map(c => `"${String(c).replace(/"/g, '""')}"`).join(','))
-                .join('\n');
-
-            const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `Asistencia_Halloween_${new Date().toISOString().slice(0, 10)}.csv`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-            showToast('Reporte CSV exportado con columnas Nombres y Apellidos.', 'success');
-        }
-
-        /********************************************************************
-         * 8. MOBILE NAVIGATION & UI RENDERING
-         ********************************************************************/
-        function switchView(viewName) {
-            const views = ['scanner', 'list', 'import', 'history'];
-            views.forEach(v => {
-                const section = document.getElementById(`view-${v}`);
-                const tab = document.getElementById(`navTab-${v}`);
-
-                if (v === viewName) {
-                    section.classList.remove('hidden');
-                    section.classList.add('flex');
-                    tab.className = 'btn-ios py-1.5 flex flex-col items-center justify-center gap-1 text-argon-orange';
-                } else {
-                    section.classList.add('hidden');
-                    section.classList.remove('flex');
-                    tab.className = 'btn-ios py-1.5 flex flex-col items-center justify-center gap-1 text-slate-400';
-                }
-            });
-        }
-
-        function setListFilter(filter) {
-            currentListFilter = filter;
-            ['all', 'pending', 'checked'].forEach(f => {
-                const btn = document.getElementById(`listFilter-${f}`);
-                if (f === filter) {
-                    btn.className = 'py-1.5 rounded-lg text-xs font-extrabold bg-argon-primary text-white transition';
-                } else {
-                    btn.className = 'py-1.5 rounded-lg text-xs font-extrabold text-slate-400 transition';
-                }
-            });
-            renderGuestList();
-        }
-
-        function refreshAllUI() {
-            const total = guests.length;
-            const checked = guests.filter(g => g.checkedIn).length;
-            const pending = total - checked;
-            const percent = total > 0 ? Math.round((checked / total) * 100) : 0;
-            const totalAlerts = (alertStats.duplicates || 0) + (alertStats.invalid || 0);
-
-            document.getElementById('kpiTotal').textContent = total;
-            document.getElementById('kpiCheckedIn').textContent = checked;
-            document.getElementById('kpiPending').textContent = pending;
-            document.getElementById('kpiAlerts').textContent = totalAlerts;
-
-            document.getElementById('progressBar').style.width = `${percent}%`;
-            document.getElementById('progressPercentText').textContent = `${checked}/${total} (${percent}%)`;
-
-            document.getElementById('listTotalCount').textContent = total;
-            document.getElementById('navBadgePending').textContent = pending;
-
-            const alertBadge = document.getElementById('navBadgeAlerts');
-            if (totalAlerts > 0) {
-                alertBadge.textContent = totalAlerts;
-                alertBadge.classList.remove('hidden');
-            } else {
-                alertBadge.classList.add('hidden');
-            }
-
-            document.getElementById('histDupCount').textContent = alertStats.duplicates || 0;
-            document.getElementById('histInvCount').textContent = alertStats.invalid || 0;
-
-            renderGuestList();
-            renderHistoryLogs();
-        }
-
-        function renderGuestList() {
-            const container = document.getElementById('guestListContainer');
-            const query = normalizeText(document.getElementById('guestSearchInput').value);
-
-            const filtered = guests.filter(g => {
-                if (currentListFilter === 'checked' && !g.checkedIn) return false;
-                if (currentListFilter === 'pending' && g.checkedIn) return false;
-                if (!query) return true;
-                return (
-                    normalizeText(g.nombres).includes(query) ||
-                    normalizeText(g.apellidos).includes(query) ||
-                    normalizeText(getFullName(g)).includes(query) ||
-                    normalizeText(g.info || '').includes(query)
-                );
-            });
-
-            if (filtered.length === 0) {
-                container.innerHTML = `
-                    <div class="py-8 text-center text-xs text-slate-400">
-                        <i class="fa-solid fa-ghost text-2xl text-slate-600 mb-2 block"></i>
-                        No se encontraron registros con ese filtro.
-                    </div>
-                `;
-                return;
-            }
-
-            container.innerHTML = filtered.map(g => {
-                const isChecked = g.checkedIn;
-                return `
-                    <div class="p-3 rounded-xl bg-slate-950/85 border ${isChecked ? 'border-argon-success/35' : 'border-white/10'} flex items-center justify-between gap-2.5">
-                        <div class="min-w-0 flex-1">
-                            <div class="flex items-center gap-1.5 flex-wrap">
-                                <span class="text-xs font-extrabold text-white truncate">${escapeHtml(g.nombres)}</span>
-                                <span class="text-xs font-extrabold text-argon-orange truncate">${escapeHtml(g.apellidos)}</span>
-                            </div>
-                            <div class="text-[11px] text-slate-400 truncate mt-0.5">
-                                ${escapeHtml(g.info || 'Google Forms')}
-                                ${isChecked ? `<span class="text-argon-success font-mono font-bold ml-1">• ${g.checkInTime}</span>` : ''}
-                            </div>
-                        </div>
-
-                        <div class="flex items-center gap-1.5 shrink-0">
-                            <button
-                                onclick="verifyQrCode('${escapeJs(getFullName(g))}', 'Lista Móvil')"
-                                class="btn-ios px-3 py-2 rounded-xl ${isChecked ? 'bg-argon-orange/20 border border-argon-orange/40 text-argon-orange' : 'bg-argon-success text-slate-950'} text-xs font-extrabold flex items-center gap-1"
-                            >
-                                <i class="fa-solid ${isChecked ? 'fa-rotate' : 'fa-check'}"></i>
-                                <span>${isChecked ? 'Re-Validar' : 'Ingresar'}</span>
-                            </button>
-
-                            ${isChecked ? `
-                            <button
-                                onclick="toggleGuestStatus('${g.id}')"
-                                class="btn-ios w-8 h-8 rounded-xl bg-slate-800 text-amber-300 border border-white/10 flex items-center justify-center text-xs"
-                                title="Revertir a pendiente"
-                            >
-                                <i class="fa-solid fa-rotate-left"></i>
-                            </button>
-                            ` : ''}
-
-                            <button
-                                onclick="removeGuest('${g.id}')"
-                                class="btn-ios w-8 h-8 rounded-xl bg-slate-900 text-slate-400 hover:text-rose-400 border border-white/5 flex items-center justify-center text-xs"
-                                title="Eliminar"
-                            >
-                                <i class="fa-solid fa-trash-can"></i>
-                            </button>
-                        </div>
-                    </div>
-                `;
-            }).join('');
-        }
-
-        function addHistoryLog(entry) {
-            scanLogs.unshift(entry);
-            if (scanLogs.length > 50) scanLogs.pop();
-        }
-
-        function clearHistoryLogs() {
-            scanLogs = [];
-            saveState();
-            renderHistoryLogs();
-        }
-
-        function renderHistoryLogs() {
-            const container = document.getElementById('historyListContainer');
-            if (scanLogs.length === 0) {
-                container.innerHTML = `
-                    <div class="py-8 text-center text-xs text-slate-500">
-                        Sin escaneos registrados todavía.
-                    </div>
-                `;
-                return;
-            }
-
-            container.innerHTML = scanLogs.map(item => {
-                let badge = '';
-                let icon = '';
-                if (item.status === 'valid') {
-                    badge = 'bg-argon-success/20 text-argon-success border-argon-success/40';
-                    icon = 'fa-circle-check text-argon-success';
-                } else if (item.status === 'duplicate') {
-                    badge = 'bg-argon-orange/20 text-argon-orange border-argon-orange/40';
-                    icon = 'fa-triangle-exclamation text-argon-orange';
-                } else {
-                    badge = 'bg-argon-danger/20 text-argon-danger border-argon-danger/40';
-                    icon = 'fa-ban text-argon-danger';
-                }
-
-                return `
-                    <div class="p-3 rounded-xl bg-slate-950/85 border border-white/10 flex items-center justify-between gap-2 text-xs">
-                        <div class="flex items-center gap-2.5 min-w-0">
-                            <i class="fa-solid ${icon} text-base shrink-0"></i>
-                            <div class="min-w-0">
-                                <div class="font-extrabold text-white truncate">${escapeHtml(item.raw)}</div>
-                                <div class="text-[11px] text-slate-400 truncate">${escapeHtml(item.detail)}</div>
-                            </div>
-                        </div>
-                        <div class="text-right shrink-0">
-                            <span class="px-2 py-0.5 rounded-md text-[10px] font-extrabold border ${badge}">
-                                ${item.status === 'valid' ? 'VÁLIDO' : item.status === 'duplicate' ? 'DUPLICADO' : 'SIN ENTRADA'}
-                            </span>
-                            <div class="text-[10px] font-mono text-slate-400 mt-1">${item.time}</div>
-                        </div>
-                    </div>
-                `;
-            }).join('');
-        }
-
-        /********************************************************************
-         * 9. PERSISTENCE & UTILITIES
-         ********************************************************************/
-        function saveState() {
-            try {
-                localStorage.setItem(STORAGE_KEY_GUESTS, JSON.stringify(guests));
-                localStorage.setItem(STORAGE_KEY_LOGS, JSON.stringify(scanLogs));
-                localStorage.setItem(STORAGE_KEY_STATS, JSON.stringify(alertStats));
-            } catch (e) {}
-        }
-
-        function loadState() {
-            try {
-                const g = localStorage.getItem(STORAGE_KEY_GUESTS);
-                const l = localStorage.getItem(STORAGE_KEY_LOGS);
-                const s = localStorage.getItem(STORAGE_KEY_STATS);
-
-                guests = g ? JSON.parse(g) : JSON.parse(JSON.stringify(INITIAL_DEMO_GUESTS));
-                scanLogs = l ? JSON.parse(l) : [
-                    { nombres: 'Carlos Sebastián', apellidos: 'Mendoza Ruiz', raw: 'Carlos Sebastián Mendoza Ruiz', status: 'valid', detail: 'Entrada verificada exitosamente', time: '21:24:02', source: 'Cámara iPhone' },
-                    { nombres: 'Alejandro Mateo', apellidos: 'Gómez Andrade', raw: 'Alejandro Mateo Gómez Andrade', status: 'valid', detail: 'Entrada verificada exitosamente', time: '21:15:10', source: 'Cámara iPhone' }
-                ];
-                alertStats = s ? JSON.parse(s) : { duplicates: 0, invalid: 0 };
-            } catch (e) {
-                guests = JSON.parse(JSON.stringify(INITIAL_DEMO_GUESTS));
-                scanLogs = [];
-                alertStats = { duplicates: 0, invalid: 0 };
-            }
-        }
-
-        function showToast(msg, type = 'info') {
-            const container = document.getElementById('toastContainer');
-            const el = document.createElement('div');
-
-            let border = 'border-argon-primary';
-            let icon = 'fa-circle-info text-argon-info';
-            if (type === 'success') { border = 'border-argon-success'; icon = 'fa-circle-check text-argon-success'; }
-            if (type === 'warning') { border = 'border-argon-orange'; icon = 'fa-triangle-exclamation text-argon-orange'; }
-            if (type === 'danger') { border = 'border-argon-danger'; icon = 'fa-ban text-argon-danger'; }
-
-            el.className = `pointer-events-auto p-3 rounded-xl bg-slate-900/95 backdrop-blur-md border-l-4 ${border} text-white shadow-2xl flex items-center gap-2.5 text-xs font-bold animate-status-pop`;
-            el.innerHTML = `<i class="fa-solid ${icon} text-sm shrink-0"></i><span>${escapeHtml(msg)}</span>`;
-
-            container.appendChild(el);
-            setTimeout(() => {
-                el.style.opacity = '0';
-                el.style.transition = 'opacity 0.25s ease';
-                setTimeout(() => el.remove(), 250);
-            }, 3200);
-        }
-
-        function escapeHtml(str) {
-            return String(str || '')
-                .replace(/&/g, '&amp;')
-                .replace(/</g, '&lt;')
-                .replace(/>/g, '&gt;')
-                .replace(/"/g, '&quot;')
-                .replace(/'/g, '&#039;');
-        }
-
-        function escapeJs(str) {
-            return String(str || '')
-                .replace(/\\/g, '\\\\')
-                .replace(/'/g, "\\'")
-                .replace(/"/g, '\\"');
-        }
-
-        window.onload = function () {
-            loadState();
-            refreshAllUI();
-        };
-    </script>
+      `).join('');
+    }
+
+    function renderLogs() {
+      const cont = document.getElementById('scan-log-container');
+      if (scanLogs.length === 0) {
+        cont.innerHTML = '<div style="text-align:center; padding: 25px; color:#8898aa;">Aún no se han realizado escaneos.</div>';
+        return;
+      }
+      cont.innerHTML = scanLogs.map(l => `
+        <div class="guest-item">
+          <div>
+            <div class="guest-name" style="font-size:0.85rem;">${l.nombre}</div>
+            <div class="guest-sub">${l.tipo} • ${l.hora}</div>
+          </div>
+          <span style="font-size:0.75rem; font-weight:700; color:${l.tipo === 'ACCESO' ? 'var(--success)' : (l.tipo === 'DUPLICADO' ? 'var(--warning)' : 'var(--danger)')};">
+            ${l.tipo}
+          </span>
+        </div>
+      `).join('');
+    }
+
+    // Inicializar
+    updateStats();
+  </script>
 </body>
 </html>
