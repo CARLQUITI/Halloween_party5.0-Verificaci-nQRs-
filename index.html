@@ -25,66 +25,32 @@
 
     * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
     body {
-      margin: 0;
-      padding: 0 0 85px 0;
+      margin: 0; padding: 0 0 85px 0;
       font-family: 'Open Sans', sans-serif;
-      background-color: var(--bg);
-      color: var(--text);
+      background-color: var(--bg); color: var(--text);
       min-height: 100vh;
     }
 
     /* Header */
     .header {
-      padding: 16px 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+      padding: 16px 20px; display: flex; justify-content: space-between; align-items: center;
       background: linear-gradient(135deg, #1f1a3a 0%, #0d0e1a 100%);
       border-bottom: 1px solid var(--card-border);
     }
-    .header-title {
-      font-size: 1.15rem;
-      font-weight: 700;
-      color: #fff;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
+    .header-title { font-size: 1.15rem; font-weight: 700; color: #fff; display: flex; align-items: center; gap: 8px; }
     .badge-event {
-      background: rgba(251, 99, 64, 0.2);
-      color: var(--warning);
-      padding: 3px 8px;
-      border-radius: 12px;
-      font-size: 0.72rem;
-      font-weight: 600;
-      text-transform: uppercase;
+      background: rgba(251, 99, 64, 0.2); color: var(--warning); padding: 3px 8px;
+      border-radius: 12px; font-size: 0.72rem; font-weight: 600; text-transform: uppercase;
     }
 
     /* Contadores */
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 8px;
-      padding: 12px 16px;
-    }
+    .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; padding: 12px 16px; }
     .stat-card {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 12px;
-      padding: 10px 4px;
-      text-align: center;
+      background: var(--card-bg); border: 1px solid var(--card-border);
+      border-radius: 12px; padding: 10px 4px; text-align: center;
     }
-    .stat-label {
-      font-size: 0.65rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      color: #8898aa;
-    }
-    .stat-val {
-      font-size: 1.25rem;
-      font-weight: 700;
-      margin-top: 2px;
-    }
+    .stat-label { font-size: 0.65rem; font-weight: 700; text-transform: uppercase; color: #8898aa; }
+    .stat-val { font-size: 1.25rem; font-weight: 700; margin-top: 2px; }
 
     /* Secciones */
     .view-section { display: none; padding: 12px 16px; }
@@ -92,24 +58,15 @@
 
     /* Lector QR */
     #reader-container {
-      position: relative;
-      background: #000;
-      border-radius: 16px;
-      overflow: hidden;
-      border: 2px solid var(--card-border);
-      margin-bottom: 16px;
-      min-height: 260px;
+      position: relative; background: #000; border-radius: 16px; overflow: hidden;
+      border: 2px solid var(--card-border); margin-bottom: 16px; min-height: 260px;
     }
     #reader { width: 100%; }
 
     /* Estado de Validación */
     .result-box {
-      border-radius: 16px;
-      padding: 18px;
-      text-align: center;
-      background: var(--card-bg);
-      border: 2px solid var(--card-border);
-      transition: all 0.25s ease;
+      border-radius: 16px; padding: 18px; text-align: center; background: var(--card-bg);
+      border: 2px solid var(--card-border); transition: all 0.25s ease;
     }
     .result-box.valid { border-color: var(--success); background: rgba(45, 206, 137, 0.12); }
     .result-box.duplicate { border-color: var(--warning); background: rgba(251, 99, 64, 0.12); }
@@ -124,35 +81,47 @@
     .result-name { font-size: 1.25rem; font-weight: 700; color: #fff; word-break: break-word; }
     .result-detail { font-size: 0.82rem; color: #adb5bd; margin-top: 6px; }
 
+    /* Buscador Interactivo */
+    #link-guest-search {
+      width: 100%; padding: 12px; background: #111322; color: #fff;
+      border: 1px solid var(--primary); border-radius: 8px;
+      font-size: 0.95rem; margin-top: 12px; outline: none;
+    }
+    #link-guest-search::placeholder { color: #8898aa; }
+    #link-guest-results {
+      max-height: 160px; overflow-y: auto; margin-top: 8px; margin-bottom: 12px;
+      background: #151829; border-radius: 8px; border: 1px solid var(--card-border);
+    }
+    .search-item {
+      padding: 12px; border-bottom: 1px solid var(--card-border);
+      color: #adb5bd; cursor: pointer; font-size: 0.9rem; text-align: left;
+    }
+    .search-item:last-child { border-bottom: none; }
+    .search-item.selected {
+      background: rgba(94, 114, 228, 0.25); color: #fff; font-weight: bold;
+      border-left: 4px solid var(--primary);
+    }
+
     /* Formularios y Botones */
     .btn {
-      width: 100%; padding: 12px 16px; border-radius: 10px;
-      border: none; font-size: 0.9rem; font-weight: 600;
-      cursor: pointer; display: flex; align-items: center;
-      justify-content: center; gap: 8px; margin-top: 10px;
+      width: 100%; padding: 12px 16px; border-radius: 10px; border: none; font-size: 0.9rem; font-weight: 600;
+      cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 10px;
     }
     .btn-primary { background: var(--primary); color: #fff; }
     .btn-success { background: var(--success); color: #fff; }
     .btn-warning { background: var(--warning); color: #fff; }
     .btn-danger { background: var(--danger); color: #fff; }
 
-    .argon-select {
-      width: 100%; padding: 12px; background: #111322; color: #fff;
-      border: 1px solid var(--primary); border-radius: 8px;
-      font-size: 0.95rem; margin: 10px 0; outline: none;
-    }
-
     textarea {
-      width: 100%; height: 140px; background: #151829;
-      border: 1px solid var(--card-border); border-radius: 10px;
+      width: 100%; height: 140px; background: #151829; border: 1px solid var(--card-border); border-radius: 10px;
       color: #fff; padding: 10px; font-family: inherit; font-size: 0.85rem; margin-top: 8px;
     }
 
     /* Tabla / Lista */
     .guest-list { display: flex; flex-direction: column; gap: 8px; margin-top: 10px; max-height: 55vh; overflow-y: auto; }
     .guest-item {
-      background: var(--card-bg); border: 1px solid var(--card-border);
-      border-radius: 10px; padding: 10px 14px; display: flex; justify-content: space-between; align-items: center;
+      background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 10px;
+      padding: 10px 14px; display: flex; justify-content: space-between; align-items: center;
     }
     .guest-item.in { border-left: 4px solid var(--success); }
     .guest-name { font-weight: 600; font-size: 0.9rem; }
@@ -160,14 +129,12 @@
 
     /* Barra inferior estilo iOS */
     .nav-tabs {
-      position: fixed; bottom: 0; left: 0; right: 0;
-      background: rgba(17, 19, 34, 0.94); backdrop-filter: blur(12px);
+      position: fixed; bottom: 0; left: 0; right: 0; background: rgba(17, 19, 34, 0.94); backdrop-filter: blur(12px);
       border-top: 1px solid var(--card-border); display: flex; justify-content: space-around;
       padding: 8px 0 env(safe-area-inset-bottom, 12px); z-index: 100;
     }
     .nav-btn {
-      background: none; border: none; color: #8898aa; font-size: 0.7rem;
-      display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer;
+      background: none; border: none; color: #8898aa; font-size: 0.7rem; display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer;
     }
     .nav-btn i { font-size: 1.15rem; }
     .nav-btn.active { color: var(--primary); }
@@ -208,10 +175,13 @@
         <div class="result-name" id="res-name">Apunta al código QR</div>
         <div class="result-detail" id="res-detail"></div>
         
-        <!-- Interfaz de Vinculación Manual -->
-        <div id="link-ui" style="display:none; margin-top: 15px; text-align: left; padding-top: 15px; border-top: 1px solid var(--card-border);">
-          <div style="font-size:0.85rem; color:#fff; font-weight: 600; margin-bottom: 8px;">¿A quién pertenece esta entrada?</div>
-          <select id="link-guest-select" class="argon-select"></select>
+        <!-- Interfaz de Vinculación Manual con Buscador -->
+        <div id="link-ui" style="display:none; margin-top: 15px; border-top: 1px solid var(--card-border); padding-top: 15px;">
+          <div style="font-size:0.85rem; color:#fff; font-weight: 600; text-align:left;">¿A quién pertenece esta entrada?</div>
+          
+          <input type="text" id="link-guest-search" placeholder="Escribe para buscar (ej. Juan)..." autocomplete="off" spellcheck="false" oninput="handleSearch(this.value)">
+          <div id="link-guest-results" style="display:none;"></div>
+          
           <div style="display: flex; gap: 10px;">
              <button class="btn btn-success" style="flex: 1; margin-top:0;" onclick="linkAndAdmit()">Autorizar</button>
              <button class="btn btn-danger" style="flex: 1; margin-top:0;" onclick="cancelLink()">Cancelar</button>
@@ -266,6 +236,10 @@
     let html5QrCode = null;
     let cameraActive = false;
     let isProcessing = false;
+    
+    // Variables para el buscador
+    let currentUrlForLink = "";
+    let selectedGuestForLink = null;
 
     function cleanStr(str) {
       return (str || '').toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]/g, " ").replace(/\s+/g, " ").trim();
@@ -279,8 +253,7 @@
       document.getElementById('stat-left').textContent = Math.max(0, total - inside);
       document.getElementById('stat-alerts').textContent = alertCount;
       document.getElementById('badge-count').textContent = `${total} registrados`;
-      renderList();
-      renderLogs();
+      renderList(); renderLogs();
     }
 
     function switchTab(viewId, btn) {
@@ -295,19 +268,14 @@
       if (!html5QrCode) html5QrCode = new Html5Qrcode("reader");
 
       if (cameraActive) {
-        await html5QrCode.stop();
-        cameraActive = false;
-        btn.innerHTML = '<i class="fa-solid fa-camera"></i> Iniciar Cámara';
-        btn.className = 'btn btn-primary';
+        await html5QrCode.stop(); cameraActive = false;
+        btn.innerHTML = '<i class="fa-solid fa-camera"></i> Iniciar Cámara'; btn.className = 'btn btn-primary';
       } else {
         try {
           await html5QrCode.start({ facingMode: "environment" }, { fps: 10, qrbox: { width: 230, height: 230 } }, onScanSuccess, () => {});
           cameraActive = true;
-          btn.innerHTML = '<i class="fa-solid fa-stop"></i> Detener Cámara';
-          btn.className = 'btn btn-warning';
-        } catch (err) {
-          alert("Error: Otorga permisos de cámara en Safari.");
-        }
+          btn.innerHTML = '<i class="fa-solid fa-stop"></i> Detener Cámara'; btn.className = 'btn btn-warning';
+        } catch (err) { alert("Error: Otorga permisos de cámara en Safari."); }
       }
     }
 
@@ -321,12 +289,10 @@
       const nameEl = document.getElementById('res-name');
       const detail = document.getElementById('res-detail');
       
-      // Ocultar UI de vinculación por defecto
       document.getElementById('link-ui').style.display = 'none';
-
       let query = decodedText.trim();
 
-      // Si el enlace ya fue vinculado antes, reemplazarlo por el nombre
+      // Verificar si ya se vinculó previamente
       if (urlCache[query]) {
          query = urlCache[query];
       }
@@ -345,110 +311,123 @@
         if (guest.entered) {
           box.className = 'result-box duplicate';
           icon.innerHTML = '<i class="fa-solid fa-triangle-exclamation" style="color:var(--warning)"></i>';
-          status.textContent = '¡Entrada Ya Utilizada!';
-          status.style.color = 'var(--warning)';
-          nameEl.textContent = guest.fullName;
-          detail.textContent = `Ingresó previamente a las: ${guest.timeEntered}`;
-          alertCount++;
-          logScan('DUPLICADO', guest.fullName, now);
+          status.textContent = '¡Entrada Ya Utilizada!'; status.style.color = 'var(--warning)';
+          nameEl.textContent = guest.fullName; detail.textContent = `Ingresó previamente a las: ${guest.timeEntered}`;
+          alertCount++; logScan('DUPLICADO', guest.fullName, now);
         } else {
-          guest.entered = true;
-          guest.timeEntered = now;
+          guest.entered = true; guest.timeEntered = now;
           localStorage.setItem('hw_guests', JSON.stringify(registeredGuests));
-
           box.className = 'result-box valid';
           icon.innerHTML = '<i class="fa-solid fa-circle-check" style="color:var(--success)"></i>';
-          status.textContent = 'Acceso Autorizado';
-          status.style.color = 'var(--success)';
-          nameEl.textContent = guest.fullName;
-          detail.textContent = `Verificado a las: ${now}`;
+          status.textContent = 'Acceso Autorizado'; status.style.color = 'var(--success)';
+          nameEl.textContent = guest.fullName; detail.textContent = `Verificado a las: ${now}`;
           logScan('ACCESO', guest.fullName, now);
         }
         setTimeout(() => { isProcessing = false; }, 3000);
       } else {
         if (query.includes('http') || query.includes('generatorqr')) {
-           // MODO VINCULACIÓN MANUAL
+           // MODO BUSCADOR Y VINCULACIÓN
            box.className = 'result-box link-mode';
            icon.innerHTML = '<i class="fa-solid fa-link" style="color:var(--primary)"></i>';
-           status.textContent = 'NUEVO QR DETECTADO';
-           status.style.color = 'var(--primary)';
-           nameEl.textContent = 'Asignación Requerida';
-           detail.textContent = 'Pregunta el nombre para vincular este código.';
+           status.textContent = 'NUEVO QR DETECTADO'; status.style.color = 'var(--primary)';
+           nameEl.textContent = 'Asignación Requerida'; detail.textContent = 'Busca el nombre de la persona para vincular.';
            
-           const select = document.getElementById('link-guest-select');
-           select.innerHTML = '<option value="">-- Selecciona el invitado --</option>' + 
-              registeredGuests.filter(g => !g.entered).map(g => `<option value="${g.fullName}">${g.fullName}</option>`).join('');
-           select.setAttribute('data-url', decodedText.trim());
+           currentUrlForLink = decodedText.trim();
+           selectedGuestForLink = null;
            
+           document.getElementById('link-guest-search').value = '';
+           handleSearch(''); // Cargar lista inicial
            document.getElementById('link-ui').style.display = 'block';
-           // IMPORTANTE: No liberamos isProcessing aquí, esperamos que el usuario presione un botón.
+           // No liberamos isProcessing hasta que autorice o cancele
         } else {
            box.className = 'result-box invalid';
            icon.innerHTML = '<i class="fa-solid fa-circle-xmark" style="color:var(--danger)"></i>';
-           status.textContent = 'Acceso Denegado';
-           status.style.color = 'var(--danger)';
+           status.textContent = 'Acceso Denegado'; status.style.color = 'var(--danger)';
            nameEl.textContent = query.length > 40 ? query.substring(0, 37) + '...' : query;
            detail.textContent = 'No coincide con ningún registro.';
-           alertCount++;
-           logScan('DENEGADO', query, now);
+           alertCount++; logScan('DENEGADO', query, now);
            setTimeout(() => { isProcessing = false; }, 3000);
         }
       }
-      
-      localStorage.setItem('hw_alerts', alertCount);
-      updateStats();
+      localStorage.setItem('hw_alerts', alertCount); updateStats();
     }
 
-    function linkAndAdmit() {
-        const select = document.getElementById('link-guest-select');
-        const selectedFullName = select.value;
-        const currentUrl = select.getAttribute('data-url');
+    // Funciones del Buscador
+    function handleSearch(query) {
+        const resultsContainer = document.getElementById('link-guest-results');
+        const cleanQ = cleanStr(query);
+        const availableGuests = registeredGuests.filter(g => !g.entered);
+        
+        let filtered = availableGuests;
+        if (cleanQ.length > 0) {
+            filtered = availableGuests.filter(g => cleanStr(g.fullName).includes(cleanQ));
+        }
 
-        if (!selectedFullName) {
-            alert("Debes seleccionar un nombre de la lista.");
+        if (filtered.length === 0) {
+            resultsContainer.innerHTML = '<div style="padding: 12px; color: #adb5bd; font-size: 0.85rem; text-align:center;">No se encontraron coincidencias.</div>';
+            resultsContainer.style.display = 'block';
             return;
         }
 
+        const maxDisplay = query.length === 0 ? 10 : filtered.length;
+        const displayList = filtered.slice(0, maxDisplay);
+
+        resultsContainer.innerHTML = displayList.map(g => {
+            const idSeguro = cleanStr(g.fullName).replace(/\s/g, '-');
+            return `<div class="search-item" onclick="selectGuest('${g.fullName}', this)">${g.fullName}</div>`;
+        }).join('');
+        
+        if (query.length === 0 && availableGuests.length > 10) {
+             resultsContainer.innerHTML += `<div style="padding: 8px; text-align:center; font-size:0.75rem; color:#8898aa;">Escribe para ver todos...</div>`;
+        }
+
+        resultsContainer.style.display = 'block';
+    }
+
+    function selectGuest(fullName, element) {
+        selectedGuestForLink = fullName;
+        document.querySelectorAll('.search-item').forEach(el => el.classList.remove('selected'));
+        element.classList.add('selected');
+        // Ocultar teclado perdiendo el foco
+        document.getElementById('link-guest-search').blur(); 
+    }
+
+    function linkAndAdmit() {
+        if (!selectedGuestForLink) return alert("Debes seleccionar un nombre de la lista tocándolo.");
+
         // Guardar mapeo
-        urlCache[currentUrl] = selectedFullName;
+        urlCache[currentUrlForLink] = selectedGuestForLink;
         localStorage.setItem('hw_url_cache', JSON.stringify(urlCache));
 
         // Registrar entrada
-        const guest = registeredGuests.find(g => g.fullName === selectedFullName);
+        const guest = registeredGuests.find(g => g.fullName === selectedGuestForLink);
         const now = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
         
         if (guest) {
-            guest.entered = true;
-            guest.timeEntered = now;
+            guest.entered = true; guest.timeEntered = now;
             localStorage.setItem('hw_guests', JSON.stringify(registeredGuests));
             logScan('ACCESO', guest.fullName, now);
         }
 
-        // Actualizar UI visualmente a Verde
+        // Actualizar UI
         const box = document.getElementById('result-box');
         box.className = 'result-box valid';
         document.getElementById('res-icon').innerHTML = '<i class="fa-solid fa-circle-check" style="color:var(--success)"></i>';
-        document.getElementById('res-status').textContent = 'Vinculado y Autorizado';
-        document.getElementById('res-status').style.color = 'var(--success)';
-        document.getElementById('res-name').textContent = guest.fullName;
-        document.getElementById('res-detail').textContent = 'El código QR ha sido enlazado a esta persona.';
+        document.getElementById('res-status').textContent = 'Vinculado y Autorizado'; document.getElementById('res-status').style.color = 'var(--success)';
+        document.getElementById('res-name').textContent = guest.fullName; document.getElementById('res-detail').textContent = 'El código QR ha sido enlazado.';
         
         document.getElementById('link-ui').style.display = 'none';
         updateStats();
-
         setTimeout(() => { isProcessing = false; }, 3000);
     }
 
     function cancelLink() {
         document.getElementById('link-ui').style.display = 'none';
-        
         const box = document.getElementById('result-box');
         box.className = 'result-box invalid';
         document.getElementById('res-icon').innerHTML = '<i class="fa-solid fa-circle-xmark" style="color:var(--danger)"></i>';
-        document.getElementById('res-status').textContent = 'Vinculación Cancelada';
-        document.getElementById('res-status').style.color = 'var(--danger)';
-        document.getElementById('res-name').textContent = '';
-        document.getElementById('res-detail').textContent = 'Puedes volver a escanear.';
+        document.getElementById('res-status').textContent = 'Vinculación Cancelada'; document.getElementById('res-status').style.color = 'var(--danger)';
+        document.getElementById('res-name').textContent = ''; document.getElementById('res-detail').textContent = 'Puedes volver a escanear.';
         
         setTimeout(() => { isProcessing = false; }, 1500);
     }
@@ -459,20 +438,18 @@
       localStorage.setItem('hw_logs', JSON.stringify(scanLogs));
     }
 
+    // Importación de datos
     function handleCSVFile(e) {
-      const file = e.target.files[0];
-      if (!file) return;
+      const file = e.target.files[0]; if (!file) return;
       const reader = new FileReader();
       reader.onload = function(evt) {
-        const text = evt.target.result;
-        const lines = text.split(/\r\n|\n/).filter(l => l.trim().length > 0);
+        const text = evt.target.result; const lines = text.split(/\r\n|\n/).filter(l => l.trim().length > 0);
         if (lines.length < 2) return alert("El archivo CSV no contiene suficientes filas.");
 
         const headers = lines[0].split(',').map(h => h.trim().toLowerCase());
         let fnIdx = headers.findIndex(h => h.includes('nombre'));
         let lnIdx = headers.findIndex(h => h.includes('apellido'));
-        if (fnIdx === -1) fnIdx = 1; 
-        if (lnIdx === -1) lnIdx = 2;
+        if (fnIdx === -1) fnIdx = 1; if (lnIdx === -1) lnIdx = 2;
 
         const newGuests = [];
         for (let i = 1; i < lines.length; i++) {
@@ -481,15 +458,13 @@
           if (full.length > 2) newGuests.push({ firstName: cols[fnIdx]||'', lastName: cols[lnIdx]||'', fullName: full, entered: false, timeEntered: null });
         }
         saveImportedList(newGuests);
-      };
-      reader.readAsText(file);
+      }; reader.readAsText(file);
     }
 
     function processPastedText() {
       const val = document.getElementById('paste-input').value.trim();
       if (!val) return alert("Pega primero la lista de nombres.");
-      const lines = val.split('\n').filter(l => l.trim().length > 0);
-      const newGuests = [];
+      const lines = val.split('\n').filter(l => l.trim().length > 0); const newGuests = [];
       lines.forEach(line => {
         const parts = line.split('\t').map(p => p.trim());
         const full = parts.length >= 2 ? `${parts[0]} ${parts[1]}`.trim() : line.trim();
@@ -499,17 +474,14 @@
     }
 
     function saveImportedList(list) {
-      registeredGuests = list;
-      localStorage.setItem('hw_guests', JSON.stringify(registeredGuests));
+      registeredGuests = list; localStorage.setItem('hw_guests', JSON.stringify(registeredGuests));
       alert(`¡Éxito! Se cargaron ${registeredGuests.length} asistentes.`);
-      updateStats();
-      switchTab('scanner', document.querySelector('.nav-btn'));
+      updateStats(); switchTab('scanner', document.querySelector('.nav-btn'));
     }
 
     function clearData() {
       if (confirm("¿Estás seguro de que deseas borrar toda la lista?")) {
-        localStorage.clear();
-        registeredGuests = []; scanLogs = []; urlCache = {}; alertCount = 0;
+        localStorage.clear(); registeredGuests = []; scanLogs = []; urlCache = {}; alertCount = 0;
         updateStats(); alert("Datos reiniciados.");
       }
     }
