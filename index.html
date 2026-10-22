@@ -81,13 +81,16 @@
     .result-name { font-size: 1.25rem; font-weight: 700; color: #fff; word-break: break-word; }
     .result-detail { font-size: 0.82rem; color: #adb5bd; margin-top: 6px; }
 
-    /* Buscador Interactivo */
-    #link-guest-search {
+    /* Buscadores Inputs */
+    .argon-input {
       width: 100%; padding: 12px; background: #111322; color: #fff;
-      border: 1px solid var(--primary); border-radius: 8px;
-      font-size: 0.95rem; margin-top: 12px; outline: none;
+      border: 1px solid var(--card-border); border-radius: 8px;
+      font-size: 0.95rem; outline: none;
     }
-    #link-guest-search::placeholder { color: #8898aa; }
+    .argon-input:focus { border-color: var(--primary); }
+    .argon-input::placeholder { color: #8898aa; }
+    
+    #link-guest-search { margin-top: 12px; border-color: var(--primary); }
     #link-guest-results {
       max-height: 160px; overflow-y: auto; margin-top: 8px; margin-bottom: 12px;
       background: #151829; border-radius: 8px; border: 1px solid var(--card-border);
@@ -118,14 +121,20 @@
     }
 
     /* Tabla / Lista */
-    .guest-list { display: flex; flex-direction: column; gap: 8px; margin-top: 10px; max-height: 55vh; overflow-y: auto; }
+    .guest-list { display: flex; flex-direction: column; gap: 8px; margin-top: 10px; max-height: 52vh; overflow-y: auto; }
     .guest-item {
       background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 10px;
       padding: 10px 14px; display: flex; justify-content: space-between; align-items: center;
     }
     .guest-item.in { border-left: 4px solid var(--success); }
-    .guest-name { font-weight: 600; font-size: 0.9rem; }
-    .guest-sub { font-size: 0.72rem; color: #8898aa; }
+    .guest-name { font-weight: 600; font-size: 0.9rem; color: #fff; }
+    .guest-sub { font-size: 0.72rem; color: #8898aa; margin-top: 2px; }
+
+    .btn-undo {
+      background: rgba(245, 54, 92, 0.15); color: var(--danger);
+      border: 1px solid rgba(245, 54, 92, 0.3); border-radius: 6px;
+      padding: 6px 12px; font-size: 0.75rem; font-weight: 700; cursor: pointer;
+    }
 
     /* Barra inferior estilo iOS */
     .nav-tabs {
@@ -179,7 +188,7 @@
         <div id="link-ui" style="display:none; margin-top: 15px; border-top: 1px solid var(--card-border); padding-top: 15px;">
           <div style="font-size:0.85rem; color:#fff; font-weight: 600; text-align:left;">¿A quién pertenece esta entrada?</div>
           
-          <input type="text" id="link-guest-search" placeholder="Escribe para buscar (ej. Juan)..." autocomplete="off" spellcheck="false" oninput="handleSearch(this.value)">
+          <input type="text" id="link-guest-search" class="argon-input" placeholder="Escribe para buscar (ej. Juan)..." autocomplete="off" spellcheck="false" oninput="handleSearch(this.value)">
           <div id="link-guest-results" style="display:none;"></div>
           
           <div style="display: flex; gap: 10px;">
@@ -194,20 +203,24 @@
 
   <!-- VISTA 2: LISTA DE REGISTRADOS -->
   <main id="view-list" class="view-section">
-    <div style="display:flex; justify-content:space-between; align-items:center;">
-      <h3 style="margin: 0; font-size: 1rem;">Asistentes Registrados</h3>
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 12px;">
+      <h3 style="margin: 0; font-size: 1rem;">Asistentes</h3>
       <span id="badge-count" style="font-size:0.75rem; color:#8898aa;">0 personas</span>
     </div>
+    
+    <!-- Buscador de la Lista -->
+    <input type="text" id="list-search-input" class="argon-input" placeholder="Buscar invitado por nombre..." autocomplete="off" spellcheck="false" oninput="renderList()">
+    
     <div class="guest-list" id="guest-items-container"></div>
   </main>
 
   <!-- VISTA 3: IMPORTAR DATOS -->
   <main id="view-import" class="view-section">
     <h3 style="margin-top:0; font-size: 1rem;">Cargar Lista de Google Forms</h3>
-    <label style="font-size:0.8rem; color:#adb5bd;">Opción A: Subir archivo CSV de respuestas</label>
+    <label style="font-size:0.8rem; color:#adb5bd;">Opción A: Subir archivo CSV</label>
     <input type="file" id="csv-file-input" accept=".csv" style="margin: 8px 0; width:100%; color:#adb5bd;" onchange="handleCSVFile(event)">
     <div style="margin: 16px 0; text-align: center; color: #8898aa; font-size: 0.8rem;">— O BIEN —</div>
-    <label style="font-size:0.8rem; color:#adb5bd;">Opción B: Pegar columnas (Nombres y Apellidos)</label>
+    <label style="font-size:0.8rem; color:#adb5bd;">Opción B: Pegar columnas</label>
     <textarea id="paste-input" placeholder="Pega aquí la lista de nombres..."></textarea>
     <button class="btn btn-success" onclick="processPastedText()">Procesar Lista</button>
     <button class="btn btn-warning" onclick="clearData()" style="margin-top: 14px;">Borrar Todo y Reiniciar</button>
@@ -215,7 +228,7 @@
 
   <!-- VISTA 4: HISTORIAL -->
   <main id="view-history" class="view-section">
-    <h3 style="margin-top:0; font-size: 1rem;">Historial de Escaneos</h3>
+    <h3 style="margin-top:0; font-size: 1rem;">Historial</h3>
     <div class="guest-list" id="scan-log-container"></div>
   </main>
 
@@ -237,7 +250,6 @@
     let cameraActive = false;
     let isProcessing = false;
     
-    // Variables para el buscador
     let currentUrlForLink = "";
     let selectedGuestForLink = null;
 
@@ -261,6 +273,7 @@
       document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
       document.getElementById('view-' + viewId).classList.add('active');
       btn.classList.add('active');
+      if (viewId === 'list') { document.getElementById('list-search-input').value = ''; renderList(); }
     }
 
     async function toggleCamera() {
@@ -292,10 +305,7 @@
       document.getElementById('link-ui').style.display = 'none';
       let query = decodedText.trim();
 
-      // Verificar si ya se vinculó previamente
-      if (urlCache[query]) {
-         query = urlCache[query];
-      }
+      if (urlCache[query]) { query = urlCache[query]; }
 
       const cleanQuery = cleanStr(query);
       const foundIndex = registeredGuests.findIndex(g => {
@@ -326,19 +336,14 @@
         setTimeout(() => { isProcessing = false; }, 3000);
       } else {
         if (query.includes('http') || query.includes('generatorqr')) {
-           // MODO BUSCADOR Y VINCULACIÓN
            box.className = 'result-box link-mode';
            icon.innerHTML = '<i class="fa-solid fa-link" style="color:var(--primary)"></i>';
            status.textContent = 'NUEVO QR DETECTADO'; status.style.color = 'var(--primary)';
            nameEl.textContent = 'Asignación Requerida'; detail.textContent = 'Busca el nombre de la persona para vincular.';
-           
-           currentUrlForLink = decodedText.trim();
-           selectedGuestForLink = null;
-           
+           currentUrlForLink = decodedText.trim(); selectedGuestForLink = null;
            document.getElementById('link-guest-search').value = '';
-           handleSearch(''); // Cargar lista inicial
+           handleSearch(''); 
            document.getElementById('link-ui').style.display = 'block';
-           // No liberamos isProcessing hasta que autorice o cancele
         } else {
            box.className = 'result-box invalid';
            icon.innerHTML = '<i class="fa-solid fa-circle-xmark" style="color:var(--danger)"></i>';
@@ -352,54 +357,32 @@
       localStorage.setItem('hw_alerts', alertCount); updateStats();
     }
 
-    // Funciones del Buscador
     function handleSearch(query) {
         const resultsContainer = document.getElementById('link-guest-results');
         const cleanQ = cleanStr(query);
         const availableGuests = registeredGuests.filter(g => !g.entered);
-        
-        let filtered = availableGuests;
-        if (cleanQ.length > 0) {
-            filtered = availableGuests.filter(g => cleanStr(g.fullName).includes(cleanQ));
-        }
+        let filtered = cleanQ.length > 0 ? availableGuests.filter(g => cleanStr(g.fullName).includes(cleanQ)) : availableGuests;
 
         if (filtered.length === 0) {
             resultsContainer.innerHTML = '<div style="padding: 12px; color: #adb5bd; font-size: 0.85rem; text-align:center;">No se encontraron coincidencias.</div>';
-            resultsContainer.style.display = 'block';
-            return;
+            resultsContainer.style.display = 'block'; return;
         }
 
-        const maxDisplay = query.length === 0 ? 10 : filtered.length;
-        const displayList = filtered.slice(0, maxDisplay);
-
-        resultsContainer.innerHTML = displayList.map(g => {
-            const idSeguro = cleanStr(g.fullName).replace(/\s/g, '-');
-            return `<div class="search-item" onclick="selectGuest('${g.fullName}', this)">${g.fullName}</div>`;
-        }).join('');
-        
-        if (query.length === 0 && availableGuests.length > 10) {
-             resultsContainer.innerHTML += `<div style="padding: 8px; text-align:center; font-size:0.75rem; color:#8898aa;">Escribe para ver todos...</div>`;
-        }
-
+        const displayList = filtered.slice(0, query.length === 0 ? 10 : filtered.length);
+        resultsContainer.innerHTML = displayList.map(g => `<div class="search-item" onclick="selectGuest('${g.fullName.replace(/'/g, "\\'")}', this)">${g.fullName}</div>`).join('');
+        if (query.length === 0 && availableGuests.length > 10) resultsContainer.innerHTML += `<div style="padding: 8px; text-align:center; font-size:0.75rem; color:#8898aa;">Escribe para ver todos...</div>`;
         resultsContainer.style.display = 'block';
     }
 
     function selectGuest(fullName, element) {
         selectedGuestForLink = fullName;
         document.querySelectorAll('.search-item').forEach(el => el.classList.remove('selected'));
-        element.classList.add('selected');
-        // Ocultar teclado perdiendo el foco
-        document.getElementById('link-guest-search').blur(); 
+        element.classList.add('selected'); document.getElementById('link-guest-search').blur(); 
     }
 
     function linkAndAdmit() {
-        if (!selectedGuestForLink) return alert("Debes seleccionar un nombre de la lista tocándolo.");
-
-        // Guardar mapeo
-        urlCache[currentUrlForLink] = selectedGuestForLink;
-        localStorage.setItem('hw_url_cache', JSON.stringify(urlCache));
-
-        // Registrar entrada
+        if (!selectedGuestForLink) return alert("Debes seleccionar un nombre de la lista.");
+        urlCache[currentUrlForLink] = selectedGuestForLink; localStorage.setItem('hw_url_cache', JSON.stringify(urlCache));
         const guest = registeredGuests.find(g => g.fullName === selectedGuestForLink);
         const now = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
         
@@ -409,15 +392,13 @@
             logScan('ACCESO', guest.fullName, now);
         }
 
-        // Actualizar UI
         const box = document.getElementById('result-box');
         box.className = 'result-box valid';
         document.getElementById('res-icon').innerHTML = '<i class="fa-solid fa-circle-check" style="color:var(--success)"></i>';
         document.getElementById('res-status').textContent = 'Vinculado y Autorizado'; document.getElementById('res-status').style.color = 'var(--success)';
         document.getElementById('res-name').textContent = guest.fullName; document.getElementById('res-detail').textContent = 'El código QR ha sido enlazado.';
         
-        document.getElementById('link-ui').style.display = 'none';
-        updateStats();
+        document.getElementById('link-ui').style.display = 'none'; updateStats();
         setTimeout(() => { isProcessing = false; }, 3000);
     }
 
@@ -428,29 +409,44 @@
         document.getElementById('res-icon').innerHTML = '<i class="fa-solid fa-circle-xmark" style="color:var(--danger)"></i>';
         document.getElementById('res-status').textContent = 'Vinculación Cancelada'; document.getElementById('res-status').style.color = 'var(--danger)';
         document.getElementById('res-name').textContent = ''; document.getElementById('res-detail').textContent = 'Puedes volver a escanear.';
-        
         setTimeout(() => { isProcessing = false; }, 1500);
     }
 
+    // FUNCION DE ANULACION
+    function undoValidation(fullName) {
+        if (!confirm(`¿Estás seguro de anular el ingreso de ${fullName}?\nEsto liberará el código QR que se le había asignado.`)) return;
+        
+        // 1. Marcar como NO ingresado
+        const guest = registeredGuests.find(g => g.fullName === fullName);
+        if (guest) { guest.entered = false; guest.timeEntered = null; }
+        localStorage.setItem('hw_guests', JSON.stringify(registeredGuests));
+
+        // 2. Liberar el código QR
+        for (let url in urlCache) {
+            if (urlCache[url] === fullName) { delete urlCache[url]; }
+        }
+        localStorage.setItem('hw_url_cache', JSON.stringify(urlCache));
+
+        // 3. Registrar en historial
+        const now = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        logScan('ANULADO', fullName, now);
+
+        updateStats();
+    }
+
     function logScan(tipo, nombre, hora) {
-      scanLogs.unshift({ tipo, nombre, hora });
-      if (scanLogs.length > 60) scanLogs.pop();
+      scanLogs.unshift({ tipo, nombre, hora }); if (scanLogs.length > 60) scanLogs.pop();
       localStorage.setItem('hw_logs', JSON.stringify(scanLogs));
     }
 
-    // Importación de datos
     function handleCSVFile(e) {
-      const file = e.target.files[0]; if (!file) return;
-      const reader = new FileReader();
+      const file = e.target.files[0]; if (!file) return; const reader = new FileReader();
       reader.onload = function(evt) {
         const text = evt.target.result; const lines = text.split(/\r\n|\n/).filter(l => l.trim().length > 0);
         if (lines.length < 2) return alert("El archivo CSV no contiene suficientes filas.");
-
         const headers = lines[0].split(',').map(h => h.trim().toLowerCase());
-        let fnIdx = headers.findIndex(h => h.includes('nombre'));
-        let lnIdx = headers.findIndex(h => h.includes('apellido'));
+        let fnIdx = headers.findIndex(h => h.includes('nombre')); let lnIdx = headers.findIndex(h => h.includes('apellido'));
         if (fnIdx === -1) fnIdx = 1; if (lnIdx === -1) lnIdx = 2;
-
         const newGuests = [];
         for (let i = 1; i < lines.length; i++) {
           const cols = lines[i].split(',').map(c => c.replace(/"/g, '').trim());
@@ -475,8 +471,7 @@
 
     function saveImportedList(list) {
       registeredGuests = list; localStorage.setItem('hw_guests', JSON.stringify(registeredGuests));
-      alert(`¡Éxito! Se cargaron ${registeredGuests.length} asistentes.`);
-      updateStats(); switchTab('scanner', document.querySelector('.nav-btn'));
+      alert(`¡Éxito! Se cargaron ${registeredGuests.length} asistentes.`); updateStats(); switchTab('scanner', document.querySelector('.nav-btn'));
     }
 
     function clearData() {
@@ -488,11 +483,25 @@
 
     function renderList() {
       const cont = document.getElementById('guest-items-container');
-      if (registeredGuests.length === 0) return cont.innerHTML = '<div style="padding: 25px; text-align:center; color:#8898aa;">Vacío</div>';
-      cont.innerHTML = registeredGuests.map(g => `
+      const queryInput = document.getElementById('list-search-input');
+      const query = queryInput ? cleanStr(queryInput.value) : '';
+
+      let filtered = registeredGuests;
+      if (query.length > 0) { filtered = registeredGuests.filter(g => cleanStr(g.fullName).includes(query)); }
+
+      if (filtered.length === 0) return cont.innerHTML = '<div style="padding: 25px; text-align:center; color:#8898aa;">No se encontraron invitados.</div>';
+      
+      cont.innerHTML = filtered.map(g => `
         <div class="guest-item ${g.entered ? 'in' : ''}">
-          <div><div class="guest-name">${g.fullName}</div><div class="guest-sub">${g.entered ? 'Adentro - ' + g.timeEntered : 'Sin ingresar'}</div></div>
-          <div>${g.entered ? '<i class="fa-solid fa-check" style="color:var(--success)"></i>' : '<i class="fa-solid fa-clock" style="color:#8898aa"></i>'}</div>
+          <div style="flex: 1; min-width: 0;">
+            <div class="guest-name" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${g.fullName}</div>
+            <div class="guest-sub">${g.entered ? 'Adentro - ' + g.timeEntered : 'Sin ingresar'}</div>
+          </div>
+          <div style="display:flex; align-items:center; margin-left: 10px;">
+            ${g.entered 
+              ? `<button class="btn-undo" onclick="undoValidation('${g.fullName.replace(/'/g, "\\'")}')"><i class="fa-solid fa-rotate-left"></i> Anular</button>` 
+              : '<i class="fa-solid fa-clock" style="color:#8898aa"></i>'}
+          </div>
         </div>
       `).join('');
     }
@@ -500,12 +509,17 @@
     function renderLogs() {
       const cont = document.getElementById('scan-log-container');
       if (scanLogs.length === 0) return cont.innerHTML = '<div style="padding: 25px; text-align:center; color:#8898aa;">Vacío</div>';
-      cont.innerHTML = scanLogs.map(l => `
+      cont.innerHTML = scanLogs.map(l => {
+        let color = l.tipo === 'ACCESO' ? 'var(--success)' : (l.tipo === 'DUPLICADO' ? 'var(--warning)' : (l.tipo === 'ANULADO' ? '#8898aa' : 'var(--danger)'));
+        return `
         <div class="guest-item">
-          <div><div class="guest-name" style="font-size:0.85rem;">${l.nombre}</div><div class="guest-sub">${l.tipo} • ${l.hora}</div></div>
-          <span style="font-size:0.75rem; font-weight:700; color:${l.tipo === 'ACCESO' ? 'var(--success)' : (l.tipo === 'DUPLICADO' ? 'var(--warning)' : 'var(--danger)')};">${l.tipo}</span>
+          <div style="flex: 1; min-width: 0;">
+            <div class="guest-name" style="font-size:0.85rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${l.nombre}</div>
+            <div class="guest-sub">${l.tipo} • ${l.hora}</div>
+          </div>
+          <span style="font-size:0.75rem; font-weight:700; color:${color}; margin-left: 10px;">${l.tipo}</span>
         </div>
-      `).join('');
+      `}).join('');
     }
 
     updateStats();
