@@ -111,126 +111,63 @@
       border: 2px solid var(--card-border);
       transition: all 0.25s ease;
     }
-    .result-box.valid {
-      border-color: var(--success);
-      background: rgba(45, 206, 137, 0.12);
-    }
-    .result-box.duplicate {
-      border-color: var(--warning);
-      background: rgba(251, 99, 64, 0.12);
-    }
-    .result-box.invalid {
-      border-color: var(--danger);
-      background: rgba(245, 54, 92, 0.12);
-    }
-    .result-box.loading {
-      border-color: var(--primary);
-      background: rgba(94, 114, 228, 0.12);
-    }
+    .result-box.valid { border-color: var(--success); background: rgba(45, 206, 137, 0.12); }
+    .result-box.duplicate { border-color: var(--warning); background: rgba(251, 99, 64, 0.12); }
+    .result-box.invalid { border-color: var(--danger); background: rgba(245, 54, 92, 0.12); }
+    .result-box.link-mode { border-color: var(--primary); background: rgba(94, 114, 228, 0.12); }
 
-    .result-icon {
-      font-size: 2.8rem;
-      margin-bottom: 8px;
-    }
+    .result-icon { font-size: 2.8rem; margin-bottom: 8px; }
     .result-status {
-      font-size: 0.95rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      margin-bottom: 6px;
+      font-size: 0.95rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.5px; margin-bottom: 6px;
     }
-    .result-name {
-      font-size: 1.25rem;
-      font-weight: 700;
-      color: #fff;
-      word-break: break-word;
-    }
-    .result-detail {
-      font-size: 0.82rem;
-      color: #adb5bd;
-      margin-top: 6px;
-    }
+    .result-name { font-size: 1.25rem; font-weight: 700; color: #fff; word-break: break-word; }
+    .result-detail { font-size: 0.82rem; color: #adb5bd; margin-top: 6px; }
 
     /* Formularios y Botones */
     .btn {
-      width: 100%;
-      padding: 12px 16px;
-      border-radius: 10px;
-      border: none;
-      font-size: 0.9rem;
-      font-weight: 600;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      margin-top: 10px;
+      width: 100%; padding: 12px 16px; border-radius: 10px;
+      border: none; font-size: 0.9rem; font-weight: 600;
+      cursor: pointer; display: flex; align-items: center;
+      justify-content: center; gap: 8px; margin-top: 10px;
     }
     .btn-primary { background: var(--primary); color: #fff; }
     .btn-success { background: var(--success); color: #fff; }
     .btn-warning { background: var(--warning); color: #fff; }
+    .btn-danger { background: var(--danger); color: #fff; }
+
+    .argon-select {
+      width: 100%; padding: 12px; background: #111322; color: #fff;
+      border: 1px solid var(--primary); border-radius: 8px;
+      font-size: 0.95rem; margin: 10px 0; outline: none;
+    }
 
     textarea {
-      width: 100%;
-      height: 140px;
-      background: #151829;
-      border: 1px solid var(--card-border);
-      border-radius: 10px;
-      color: #fff;
-      padding: 10px;
-      font-family: inherit;
-      font-size: 0.85rem;
-      margin-top: 8px;
+      width: 100%; height: 140px; background: #151829;
+      border: 1px solid var(--card-border); border-radius: 10px;
+      color: #fff; padding: 10px; font-family: inherit; font-size: 0.85rem; margin-top: 8px;
     }
 
     /* Tabla / Lista */
-    .guest-list {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      margin-top: 10px;
-      max-height: 55vh;
-      overflow-y: auto;
-    }
+    .guest-list { display: flex; flex-direction: column; gap: 8px; margin-top: 10px; max-height: 55vh; overflow-y: auto; }
     .guest-item {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 10px;
-      padding: 10px 14px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+      background: var(--card-bg); border: 1px solid var(--card-border);
+      border-radius: 10px; padding: 10px 14px; display: flex; justify-content: space-between; align-items: center;
     }
-    .guest-item.in {
-      border-left: 4px solid var(--success);
-    }
+    .guest-item.in { border-left: 4px solid var(--success); }
     .guest-name { font-weight: 600; font-size: 0.9rem; }
     .guest-sub { font-size: 0.72rem; color: #8898aa; }
 
     /* Barra inferior estilo iOS */
     .nav-tabs {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background: rgba(17, 19, 34, 0.94);
-      backdrop-filter: blur(12px);
-      border-top: 1px solid var(--card-border);
-      display: flex;
-      justify-content: space-around;
-      padding: 8px 0 env(safe-area-inset-bottom, 12px);
-      z-index: 100;
+      position: fixed; bottom: 0; left: 0; right: 0;
+      background: rgba(17, 19, 34, 0.94); backdrop-filter: blur(12px);
+      border-top: 1px solid var(--card-border); display: flex; justify-content: space-around;
+      padding: 8px 0 env(safe-area-inset-bottom, 12px); z-index: 100;
     }
     .nav-btn {
-      background: none;
-      border: none;
-      color: #8898aa;
-      font-size: 0.7rem;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 4px;
-      cursor: pointer;
+      background: none; border: none; color: #8898aa; font-size: 0.7rem;
+      display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer;
     }
     .nav-btn i { font-size: 1.15rem; }
     .nav-btn.active { color: var(--primary); }
@@ -248,22 +185,10 @@
 
   <!-- Métricas rápidas -->
   <div class="stats-grid">
-    <div class="stat-card">
-      <div class="stat-label">Lista</div>
-      <div class="stat-val" id="stat-total" style="color:#5e72e4;">0</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">Adentro</div>
-      <div class="stat-val" id="stat-in" style="color:#2dce89;">0</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">Faltan</div>
-      <div class="stat-val" id="stat-left" style="color:#fb6340;">0</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">Alertas</div>
-      <div class="stat-val" id="stat-alerts" style="color:#f5365c;">0</div>
-    </div>
+    <div class="stat-card"><div class="stat-label">Lista</div><div class="stat-val" id="stat-total" style="color:#5e72e4;">0</div></div>
+    <div class="stat-card"><div class="stat-label">Adentro</div><div class="stat-val" id="stat-in" style="color:#2dce89;">0</div></div>
+    <div class="stat-card"><div class="stat-label">Faltan</div><div class="stat-val" id="stat-left" style="color:#fb6340;">0</div></div>
+    <div class="stat-card"><div class="stat-label">Alertas</div><div class="stat-val" id="stat-alerts" style="color:#f5365c;">0</div></div>
   </div>
 
   <!-- VISTA 1: ESCÁNER QR -->
@@ -281,7 +206,18 @@
         <div class="result-icon" id="res-icon"><i class="fa-solid fa-qrcode"></i></div>
         <div class="result-status" id="res-status" style="color: #adb5bd;">Listo para escanear</div>
         <div class="result-name" id="res-name">Apunta al código QR</div>
-        <div class="result-detail" id="res-detail">Los códigos con enlace se resolverán automáticamente</div>
+        <div class="result-detail" id="res-detail"></div>
+        
+        <!-- Interfaz de Vinculación Manual -->
+        <div id="link-ui" style="display:none; margin-top: 15px; text-align: left; padding-top: 15px; border-top: 1px solid var(--card-border);">
+          <div style="font-size:0.85rem; color:#fff; font-weight: 600; margin-bottom: 8px;">¿A quién pertenece esta entrada?</div>
+          <select id="link-guest-select" class="argon-select"></select>
+          <div style="display: flex; gap: 10px;">
+             <button class="btn btn-success" style="flex: 1; margin-top:0;" onclick="linkAndAdmit()">Autorizar</button>
+             <button class="btn btn-danger" style="flex: 1; margin-top:0;" onclick="cancelLink()">Cancelar</button>
+          </div>
+        </div>
+
       </div>
     </div>
   </main>
@@ -292,58 +228,33 @@
       <h3 style="margin: 0; font-size: 1rem;">Asistentes Registrados</h3>
       <span id="badge-count" style="font-size:0.75rem; color:#8898aa;">0 personas</span>
     </div>
-    <div class="guest-list" id="guest-items-container">
-      <div style="text-align:center; padding: 25px; color:#8898aa;">No hay asistentes cargados. Ve a "Importar".</div>
-    </div>
+    <div class="guest-list" id="guest-items-container"></div>
   </main>
 
   <!-- VISTA 3: IMPORTAR DATOS -->
   <main id="view-import" class="view-section">
     <h3 style="margin-top:0; font-size: 1rem;">Cargar Lista de Google Forms</h3>
-    
     <label style="font-size:0.8rem; color:#adb5bd;">Opción A: Subir archivo CSV de respuestas</label>
     <input type="file" id="csv-file-input" accept=".csv" style="margin: 8px 0; width:100%; color:#adb5bd;" onchange="handleCSVFile(event)">
-
     <div style="margin: 16px 0; text-align: center; color: #8898aa; font-size: 0.8rem;">— O BIEN —</div>
-
     <label style="font-size:0.8rem; color:#adb5bd;">Opción B: Pegar columnas (Nombres y Apellidos)</label>
-    <textarea id="paste-input" placeholder="Pega aquí la lista de nombres y apellidos directamente desde tu Excel o Google Sheets..."></textarea>
-    
-    <button class="btn btn-success" onclick="processPastedText()">
-      <i class="fa-solid fa-file-import"></i> Procesar Lista Pegada
-    </button>
-
-    <button class="btn btn-warning" onclick="clearData()" style="margin-top: 14px;">
-      <i class="fa-solid fa-trash"></i> Borrar Todo y Reiniciar
-    </button>
+    <textarea id="paste-input" placeholder="Pega aquí la lista de nombres..."></textarea>
+    <button class="btn btn-success" onclick="processPastedText()">Procesar Lista</button>
+    <button class="btn btn-warning" onclick="clearData()" style="margin-top: 14px;">Borrar Todo y Reiniciar</button>
   </main>
 
   <!-- VISTA 4: HISTORIAL -->
   <main id="view-history" class="view-section">
     <h3 style="margin-top:0; font-size: 1rem;">Historial de Escaneos</h3>
-    <div class="guest-list" id="scan-log-container">
-      <div style="text-align:center; padding: 25px; color:#8898aa;">Aún no se han realizado escaneos.</div>
-    </div>
+    <div class="guest-list" id="scan-log-container"></div>
   </main>
 
   <!-- Navegación Inferior -->
   <nav class="nav-tabs">
-    <button class="nav-btn active" onclick="switchTab('scanner', this)">
-      <i class="fa-solid fa-qrcode"></i>
-      <span>Escáner</span>
-    </button>
-    <button class="nav-btn" onclick="switchTab('list', this)">
-      <i class="fa-solid fa-users"></i>
-      <span>Lista</span>
-    </button>
-    <button class="nav-btn" onclick="switchTab('import', this)">
-      <i class="fa-solid fa-file-arrow-up"></i>
-      <span>Importar</span>
-    </button>
-    <button class="nav-btn" onclick="switchTab('history', this)">
-      <i class="fa-solid fa-clock-rotate-left"></i>
-      <span>Historial</span>
-    </button>
+    <button class="nav-btn active" onclick="switchTab('scanner', this)"><i class="fa-solid fa-qrcode"></i><span>Escáner</span></button>
+    <button class="nav-btn" onclick="switchTab('list', this)"><i class="fa-solid fa-users"></i><span>Lista</span></button>
+    <button class="nav-btn" onclick="switchTab('import', this)"><i class="fa-solid fa-file-arrow-up"></i><span>Importar</span></button>
+    <button class="nav-btn" onclick="switchTab('history', this)"><i class="fa-solid fa-clock-rotate-left"></i><span>Historial</span></button>
   </nav>
 
   <script>
@@ -356,15 +267,8 @@
     let cameraActive = false;
     let isProcessing = false;
 
-    // Normalizar texto para comparaciones (sin tildes, minúsculas)
     function cleanStr(str) {
-      return (str || '')
-        .toLowerCase()
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "")
-        .replace(/[^a-z0-9]/g, " ")
-        .replace(/\s+/g, " ")
-        .trim();
+      return (str || '').toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]/g, " ").replace(/\s+/g, " ").trim();
     }
 
     function updateStats() {
@@ -386,12 +290,9 @@
       btn.classList.add('active');
     }
 
-    // LECTOR DE CÁMARA
     async function toggleCamera() {
       const btn = document.getElementById('btn-toggle-cam');
-      if (!html5QrCode) {
-        html5QrCode = new Html5Qrcode("reader");
-      }
+      if (!html5QrCode) html5QrCode = new Html5Qrcode("reader");
 
       if (cameraActive) {
         await html5QrCode.stop();
@@ -400,58 +301,16 @@
         btn.className = 'btn btn-primary';
       } else {
         try {
-          await html5QrCode.start(
-            { facingMode: "environment" },
-            { fps: 10, qrbox: { width: 230, height: 230 } },
-            onScanSuccess,
-            () => {}
-          );
+          await html5QrCode.start({ facingMode: "environment" }, { fps: 10, qrbox: { width: 230, height: 230 } }, onScanSuccess, () => {});
           cameraActive = true;
           btn.innerHTML = '<i class="fa-solid fa-stop"></i> Detener Cámara';
           btn.className = 'btn btn-warning';
         } catch (err) {
-          alert("Error al iniciar cámara: Asegúrate de otorgar permisos en Safari.");
+          alert("Error: Otorga permisos de cámara en Safari.");
         }
       }
     }
 
-    // RESOLVER CONTENIDO DE GENERATORQR.COM
-    async function resolveExternalQR(url) {
-      if (urlCache[url]) {
-        return urlCache[url];
-      }
-      try {
-        // Proxy CORS para extraer el HTML que renderiza generatorqr
-        const proxyUrl = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(url);
-        const resp = await fetch(proxyUrl);
-        const html = await resp.text();
-        const doc = new DOMParser().parseFromString(html, 'text/html');
-
-        // Extraer texto visible relevante
-        const bodyText = doc.body.innerText || '';
-        const lines = bodyText.split('\n').map(l => l.trim()).filter(l => l.length > 2);
-        
-        // Buscar coincidencia directa de líneas con nuestra lista
-        for (const line of lines) {
-          const match = registeredGuests.find(g => cleanStr(g.fullName) === cleanStr(line) || cleanStr(line).includes(cleanStr(g.fullName)));
-          if (match) {
-            urlCache[url] = match.fullName;
-            localStorage.setItem('hw_url_cache', JSON.stringify(urlCache));
-            return match.fullName;
-          }
-        }
-        
-        // Si no encontró coincidencia directa, devolver la línea más representativa
-        const candidate = lines.find(l => !l.toLowerCase().includes('qr') && !l.toLowerCase().includes('scan') && l.length > 4) || url;
-        urlCache[url] = candidate;
-        localStorage.setItem('hw_url_cache', JSON.stringify(urlCache));
-        return candidate;
-      } catch (e) {
-        return url;
-      }
-    }
-
-    // PROCESAR ESCANEO
     async function onScanSuccess(decodedText) {
       if (isProcessing) return;
       isProcessing = true;
@@ -461,28 +320,22 @@
       const status = document.getElementById('res-status');
       const nameEl = document.getElementById('res-name');
       const detail = document.getElementById('res-detail');
+      
+      // Ocultar UI de vinculación por defecto
+      document.getElementById('link-ui').style.display = 'none';
 
       let query = decodedText.trim();
 
-      // Si es un enlace de generatorqr.com, mostrar estado de carga
-      if (query.includes('generatorqr.com') || query.startsWith('http')) {
-        box.className = 'result-box loading';
-        icon.innerHTML = '<i class="fa-solid fa-spinner fa-spin" style="color:var(--primary)"></i>';
-        status.textContent = 'Consultando entrada...';
-        status.style.color = 'var(--primary)';
-        nameEl.textContent = 'Decodificando QR';
-        detail.textContent = 'Extrayendo datos de compra...';
-
-        query = await resolveExternalQR(query);
+      // Si el enlace ya fue vinculado antes, reemplazarlo por el nombre
+      if (urlCache[query]) {
+         query = urlCache[query];
       }
 
       const cleanQuery = cleanStr(query);
-
-      // Buscar en asistentes registrados
       const foundIndex = registeredGuests.findIndex(g => {
         const full = cleanStr(g.fullName);
         const inv = cleanStr(g.lastName + ' ' + g.firstName);
-        return full === cleanQuery || inv === cleanQuery || cleanQuery.includes(full) || (full.length > 5 && full.includes(cleanQuery));
+        return full === cleanQuery || inv === cleanQuery || (cleanQuery.length > 5 && cleanQuery.includes(full));
       });
 
       const now = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
@@ -490,7 +343,6 @@
       if (foundIndex !== -1) {
         const guest = registeredGuests[foundIndex];
         if (guest.entered) {
-          // DUPLICADO
           box.className = 'result-box duplicate';
           icon.innerHTML = '<i class="fa-solid fa-triangle-exclamation" style="color:var(--warning)"></i>';
           status.textContent = '¡Entrada Ya Utilizada!';
@@ -500,7 +352,6 @@
           alertCount++;
           logScan('DUPLICADO', guest.fullName, now);
         } else {
-          // ACCESO CORRECTO
           guest.entered = true;
           guest.timeEntered = now;
           localStorage.setItem('hw_guests', JSON.stringify(registeredGuests));
@@ -513,23 +364,93 @@
           detail.textContent = `Verificado a las: ${now}`;
           logScan('ACCESO', guest.fullName, now);
         }
+        setTimeout(() => { isProcessing = false; }, 3000);
       } else {
-        // NO ENCONTRADO
-        box.className = 'result-box invalid';
-        icon.innerHTML = '<i class="fa-solid fa-circle-xmark" style="color:var(--danger)"></i>';
-        status.textContent = 'Acceso Denegado';
-        status.style.color = 'var(--danger)';
-        nameEl.textContent = query.length > 40 ? query.substring(0, 37) + '...' : query;
-        detail.textContent = 'No coincide con ningún registro en la lista de Forms';
-        alertCount++;
-        logScan('DENEGADO', query, now);
+        if (query.includes('http') || query.includes('generatorqr')) {
+           // MODO VINCULACIÓN MANUAL
+           box.className = 'result-box link-mode';
+           icon.innerHTML = '<i class="fa-solid fa-link" style="color:var(--primary)"></i>';
+           status.textContent = 'NUEVO QR DETECTADO';
+           status.style.color = 'var(--primary)';
+           nameEl.textContent = 'Asignación Requerida';
+           detail.textContent = 'Pregunta el nombre para vincular este código.';
+           
+           const select = document.getElementById('link-guest-select');
+           select.innerHTML = '<option value="">-- Selecciona el invitado --</option>' + 
+              registeredGuests.filter(g => !g.entered).map(g => `<option value="${g.fullName}">${g.fullName}</option>`).join('');
+           select.setAttribute('data-url', decodedText.trim());
+           
+           document.getElementById('link-ui').style.display = 'block';
+           // IMPORTANTE: No liberamos isProcessing aquí, esperamos que el usuario presione un botón.
+        } else {
+           box.className = 'result-box invalid';
+           icon.innerHTML = '<i class="fa-solid fa-circle-xmark" style="color:var(--danger)"></i>';
+           status.textContent = 'Acceso Denegado';
+           status.style.color = 'var(--danger)';
+           nameEl.textContent = query.length > 40 ? query.substring(0, 37) + '...' : query;
+           detail.textContent = 'No coincide con ningún registro.';
+           alertCount++;
+           logScan('DENEGADO', query, now);
+           setTimeout(() => { isProcessing = false; }, 3000);
+        }
       }
-
+      
       localStorage.setItem('hw_alerts', alertCount);
       updateStats();
+    }
 
-      // Pausa de 3.5 segundos antes de permitir el próximo escaneo
-      setTimeout(() => { isProcessing = false; }, 3500);
+    function linkAndAdmit() {
+        const select = document.getElementById('link-guest-select');
+        const selectedFullName = select.value;
+        const currentUrl = select.getAttribute('data-url');
+
+        if (!selectedFullName) {
+            alert("Debes seleccionar un nombre de la lista.");
+            return;
+        }
+
+        // Guardar mapeo
+        urlCache[currentUrl] = selectedFullName;
+        localStorage.setItem('hw_url_cache', JSON.stringify(urlCache));
+
+        // Registrar entrada
+        const guest = registeredGuests.find(g => g.fullName === selectedFullName);
+        const now = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        
+        if (guest) {
+            guest.entered = true;
+            guest.timeEntered = now;
+            localStorage.setItem('hw_guests', JSON.stringify(registeredGuests));
+            logScan('ACCESO', guest.fullName, now);
+        }
+
+        // Actualizar UI visualmente a Verde
+        const box = document.getElementById('result-box');
+        box.className = 'result-box valid';
+        document.getElementById('res-icon').innerHTML = '<i class="fa-solid fa-circle-check" style="color:var(--success)"></i>';
+        document.getElementById('res-status').textContent = 'Vinculado y Autorizado';
+        document.getElementById('res-status').style.color = 'var(--success)';
+        document.getElementById('res-name').textContent = guest.fullName;
+        document.getElementById('res-detail').textContent = 'El código QR ha sido enlazado a esta persona.';
+        
+        document.getElementById('link-ui').style.display = 'none';
+        updateStats();
+
+        setTimeout(() => { isProcessing = false; }, 3000);
+    }
+
+    function cancelLink() {
+        document.getElementById('link-ui').style.display = 'none';
+        
+        const box = document.getElementById('result-box');
+        box.className = 'result-box invalid';
+        document.getElementById('res-icon').innerHTML = '<i class="fa-solid fa-circle-xmark" style="color:var(--danger)"></i>';
+        document.getElementById('res-status').textContent = 'Vinculación Cancelada';
+        document.getElementById('res-status').style.color = 'var(--danger)';
+        document.getElementById('res-name').textContent = '';
+        document.getElementById('res-detail').textContent = 'Puedes volver a escanear.';
+        
+        setTimeout(() => { isProcessing = false; }, 1500);
     }
 
     function logScan(tipo, nombre, hora) {
@@ -538,68 +459,42 @@
       localStorage.setItem('hw_logs', JSON.stringify(scanLogs));
     }
 
-    // IMPORTACIÓN DESDE ARCHIVO CSV
     function handleCSVFile(e) {
       const file = e.target.files[0];
       if (!file) return;
-
       const reader = new FileReader();
       reader.onload = function(evt) {
         const text = evt.target.result;
         const lines = text.split(/\r\n|\n/).filter(l => l.trim().length > 0);
-        if (lines.length < 2) {
-          alert("El archivo CSV no contiene suficientes filas.");
-          return;
-        }
+        if (lines.length < 2) return alert("El archivo CSV no contiene suficientes filas.");
 
         const headers = lines[0].split(',').map(h => h.trim().toLowerCase());
         let fnIdx = headers.findIndex(h => h.includes('nombre'));
         let lnIdx = headers.findIndex(h => h.includes('apellido'));
-
-        if (fnIdx === -1) fnIdx = 1; // Asignación por defecto
+        if (fnIdx === -1) fnIdx = 1; 
         if (lnIdx === -1) lnIdx = 2;
 
         const newGuests = [];
         for (let i = 1; i < lines.length; i++) {
           const cols = lines[i].split(',').map(c => c.replace(/"/g, '').trim());
-          const fn = cols[fnIdx] || '';
-          const ln = cols[lnIdx] || '';
-          const full = `${fn} ${ln}`.trim();
-          if (full.length > 2) {
-            newGuests.push({ firstName: fn, lastName: ln, fullName: full, entered: false, timeEntered: null });
-          }
+          const full = `${cols[fnIdx] || ''} ${cols[lnIdx] || ''}`.trim();
+          if (full.length > 2) newGuests.push({ firstName: cols[fnIdx]||'', lastName: cols[lnIdx]||'', fullName: full, entered: false, timeEntered: null });
         }
-
         saveImportedList(newGuests);
       };
       reader.readAsText(file);
     }
 
-    // IMPORTACIÓN DESDE TEXTO PEGADO
     function processPastedText() {
       const val = document.getElementById('paste-input').value.trim();
-      if (!val) {
-        alert("Pega primero la lista de nombres.");
-        return;
-      }
+      if (!val) return alert("Pega primero la lista de nombres.");
       const lines = val.split('\n').filter(l => l.trim().length > 0);
       const newGuests = [];
-
       lines.forEach(line => {
         const parts = line.split('\t').map(p => p.trim());
-        let fn = '', ln = '', full = '';
-        if (parts.length >= 2) {
-          fn = parts[0];
-          ln = parts[1];
-          full = `${fn} ${ln}`.trim();
-        } else {
-          full = line.trim();
-        }
-        if (full.length > 2) {
-          newGuests.push({ firstName: fn, lastName: ln, fullName: full, entered: false, timeEntered: null });
-        }
+        const full = parts.length >= 2 ? `${parts[0]} ${parts[1]}`.trim() : line.trim();
+        if (full.length > 2) newGuests.push({ firstName: parts[0]||'', lastName: parts[1]||'', fullName: full, entered: false, timeEntered: null });
       });
-
       saveImportedList(newGuests);
     }
 
@@ -612,58 +507,35 @@
     }
 
     function clearData() {
-      if (confirm("¿Estás seguro de que deseas borrar toda la lista y los registros de entrada?")) {
+      if (confirm("¿Estás seguro de que deseas borrar toda la lista?")) {
         localStorage.clear();
-        registeredGuests = [];
-        scanLogs = [];
-        urlCache = {};
-        alertCount = 0;
-        updateStats();
-        alert("Datos reiniciados.");
+        registeredGuests = []; scanLogs = []; urlCache = {}; alertCount = 0;
+        updateStats(); alert("Datos reiniciados.");
       }
     }
 
     function renderList() {
       const cont = document.getElementById('guest-items-container');
-      if (registeredGuests.length === 0) {
-        cont.innerHTML = '<div style="text-align:center; padding: 25px; color:#8898aa;">No hay asistentes cargados. Ve a "Importar".</div>';
-        return;
-      }
+      if (registeredGuests.length === 0) return cont.innerHTML = '<div style="padding: 25px; text-align:center; color:#8898aa;">Vacío</div>';
       cont.innerHTML = registeredGuests.map(g => `
         <div class="guest-item ${g.entered ? 'in' : ''}">
-          <div>
-            <div class="guest-name">${g.fullName}</div>
-            <div class="guest-sub">${g.entered ? 'Adentro - ' + g.timeEntered : 'Sin ingresar'}</div>
-          </div>
-          <div>
-            ${g.entered 
-              ? '<i class="fa-solid fa-check" style="color:var(--success)"></i>' 
-              : '<i class="fa-solid fa-clock" style="color:#8898aa"></i>'}
-          </div>
+          <div><div class="guest-name">${g.fullName}</div><div class="guest-sub">${g.entered ? 'Adentro - ' + g.timeEntered : 'Sin ingresar'}</div></div>
+          <div>${g.entered ? '<i class="fa-solid fa-check" style="color:var(--success)"></i>' : '<i class="fa-solid fa-clock" style="color:#8898aa"></i>'}</div>
         </div>
       `).join('');
     }
 
     function renderLogs() {
       const cont = document.getElementById('scan-log-container');
-      if (scanLogs.length === 0) {
-        cont.innerHTML = '<div style="text-align:center; padding: 25px; color:#8898aa;">Aún no se han realizado escaneos.</div>';
-        return;
-      }
+      if (scanLogs.length === 0) return cont.innerHTML = '<div style="padding: 25px; text-align:center; color:#8898aa;">Vacío</div>';
       cont.innerHTML = scanLogs.map(l => `
         <div class="guest-item">
-          <div>
-            <div class="guest-name" style="font-size:0.85rem;">${l.nombre}</div>
-            <div class="guest-sub">${l.tipo} • ${l.hora}</div>
-          </div>
-          <span style="font-size:0.75rem; font-weight:700; color:${l.tipo === 'ACCESO' ? 'var(--success)' : (l.tipo === 'DUPLICADO' ? 'var(--warning)' : 'var(--danger)')};">
-            ${l.tipo}
-          </span>
+          <div><div class="guest-name" style="font-size:0.85rem;">${l.nombre}</div><div class="guest-sub">${l.tipo} • ${l.hora}</div></div>
+          <span style="font-size:0.75rem; font-weight:700; color:${l.tipo === 'ACCESO' ? 'var(--success)' : (l.tipo === 'DUPLICADO' ? 'var(--warning)' : 'var(--danger)')};">${l.tipo}</span>
         </div>
       `).join('');
     }
 
-    // Inicializar
     updateStats();
   </script>
 </body>
